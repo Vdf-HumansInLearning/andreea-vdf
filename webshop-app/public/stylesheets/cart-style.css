@@ -1,0 +1,7 @@
+.order {
+    border: 1px solid black;
+}
+
+.item-container:not(:last-child) {
+    border-bottom: 1px solid black;
+}

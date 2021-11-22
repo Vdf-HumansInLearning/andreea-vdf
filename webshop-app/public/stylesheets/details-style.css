@@ -1,0 +1,34 @@
+.subtitle {
+    font-size: 0.8em;
+}
+.phone-img{
+    margin: auto;
+    text-align: center;
+}
+
+.phone-img img{
+    width: 200px;
+}
+
+.details h5{
+    font-size:15px !important;
+}
+
+.discounted {
+    text-decoration: line-through;
+}
+
+.checked {
+    color: orange;
+  }
+
+.unchecked {
+    color:#d0d0d0;
+}
+
+
+@media (max-width:576px) {
+    .details {
+        margin-top:25px;
+    }
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/_head'); %>
+<body>
+    <%- include('./partials/_nav_logo'); %>
+    <div class="container d-flex justify-content-center flex-column align-items-center mt-5" id="container">
+        <% if(registered === false){ %>
+        <h1 class="main-title">Register a new account</h1>
+        <form class="register-form mb-3" id="register-form" action="/register" method="post">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" placeholder="Username" class="form-control" id="username" aria-describedby="usernameHelp" required>
+            </div>
+            <label for="name" class="form-label">Full name</label>
+            <div class="mb-3 input-group">
+                <input type="text" aria-label="First name" class="form-control" placeholder="First name" id="first-name" name="first_name" required>
+                <input type="text" aria-label="Last name" class="form-control" placeholder="Last name" id="last-name" name="last_name" required>
+            </div>
+            <div class="invalid-feedback mb-2" id="invalid-name">
+                The name should contain only letters.
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" name="email" placeholder="Email address" class="form-control" id="email" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" placeholder="Password" class="form-control" id="password" required>
+            </div>
+            <div class="invalid-feedback mb-2" id="invalid-password">
+                The password should contain minimum 8 characters, at least one digit and one special character.
+            </div>
+            <div class="mb-3">
+                <label for="confirm-password" class="form-label">Confirm password</label>
+                <input type="password" placeholder="Confirm password" class="form-control" id="confirm-password" required>
+            </div>
+            <div class="invalid-feedback mb-2" id="invalid-confirm-password">
+                The passwords don't match.
+            </div>
+            <button type="submit" class="btn btn-outline-danger w-100">Register</button>
+            <div id="registerHelp" class="form-text text-center">Already have an account? <a href="/login" class="register-link text-danger">Login</a></div>
+        </form>
+        <% } else{ %>  
+            <h3 class="main-title">You are already registered.</h3>
+            <a href="/">Go back to Home page</a>
+        <% } %>
+    </div>
+
+    <%- include('./partials/_scripts'); %>
+    <script src="javascripts/register.js"></script>
+</body>
+</html>

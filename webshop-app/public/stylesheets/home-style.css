@@ -1,0 +1,8 @@
+.main {
+    width: 100%;
+    height: calc(100vh - 56px);
+    background-image: url("https://cdn.vodafone.co.uk/en/assets/images/extralarge/IMG_Background_Polygon_Red.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+}

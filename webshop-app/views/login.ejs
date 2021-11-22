@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/_head'); %>
+<body>
+    <%- include('./partials/_nav_logo'); %>
+    <div class="container d-flex justify-content-center flex-column align-items-center mt-5" id="container">
+        <% if(logged_in === false){ %>
+        <h1 class="main-title">Login to your account</h1>
+        <div class="invalid bg-danger mt-3 d-none" id="invalid">
+            <p class="text-white p-2 m-0">The username or the password is incorrect! Please try again.</p>
+        </div>
+        <form class="login-form mt-4" id="login-form" action="/login" method="post">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
+                <input type="text" id="username" name="username" class="form-control" placeholder="username" aria-label="Username" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-unlock"></i></span>
+                <input type="password" id="password" name="password" class="form-control" placeholder="password" aria-label="Password" aria-describedby="basic-addon1" required>
+            </div>
+            <button type="submit" class="btn btn-outline-danger w-100 mt-3">Login</button>
+            <div id="registerHelp" class="form-text text-center">You don't have an account? <a href="/register" class="register-link text-danger">Register</a></div>
+        </form>
+        <% } else{ %>  
+            <h3 class="main-title">You are already logged in.</h3>
+            <a href="/">Go back to Home page</a>
+        <% } %>
+    </div>
+
+    <%- include('./partials/_scripts'); %>
+    <script src="javascripts/login.js"></script>
+</body>
+</html>

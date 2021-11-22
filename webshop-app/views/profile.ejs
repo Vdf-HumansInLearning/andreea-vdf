@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/_head'); %>
+<body>
+    <%- include('./partials/_nav'); %>
+    <div class="container d-flex justify-content-center flex-column align-items-center mt-5" id="container">
+        <% if(logged_in === false){ %>
+            <h3 class="main-title">You are not logged in.</h3>
+            <a href="/login">Go to Login page</a>
+        <% } else{ %>  
+            <h3 class="main-title">Your Profile</h3>
+            <ul class="profile text-left">
+                <li>Name : <%= user.name %></li>
+                <li>Email : <%= user.email %></li>
+                <li>Address: <%= user.address.street %> street, <%= user.address.suite %>, <%= user.address.zipcode %>, <%= user.address.city %></li>
+            </ul>
+        <% } %>
+    </div>
+
+    <%- include('./partials/_scripts'); %>
+    <script src="javascripts/profile.js"></script>
+</body>
+</html>

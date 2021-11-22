@@ -1,0 +1,49 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand text-danger" href="/">WEBSTORE</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navbar">
+          <li class="nav-item">
+            <a class="nav-link" id="home-link" aria-current="page" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="phones-link" href="/phones">Phones</a>
+          </li>
+          <% if(admin){ %>
+          <li class="nav-item">
+            <a class="nav-link" id="users-link" href="/users">Users</a>
+          </li>
+          <% } %>
+        </ul>
+        
+        <div class="d-lg-flex d-block">
+            <div class="nav-item">
+              <a class="nav-link p-0 p-lg-2" href="/cart" id="shopping-cart" role="button">
+                  <i class="fas fa-shopping-cart d-none d-lg-inline"></i>
+                  <span class="d-lg-none">Shopping cart</span>
+                  <span class="badge bg-secondary" id="cart-items">0</span>
+              </a>
+            </div>
+            <div class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle p-lg-2" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="far fa-user d-none d-lg-inline"></i>
+                <span class="d-lg-none">Profile</span>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <% if(logged_in){ %>
+                  <li><a class="dropdown-item" href="/profile">Profile settings</a></li>
+                  <li><a class="dropdown-item" href="/logout">Log out</a></li>
+                <% } else{ %>
+                  <li><a class="dropdown-item" href="/login">Log in</a></li>
+                <% } %>
+              </ul>
+            </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/_head'); %>
+<body>
+    <%- include('./partials/_nav'); %>
+    <div class="menu">
+            <div class="filter-buttons justify-content-between d-md-flex">
+                <fieldset class="input-group mt-3 ps-2">
+                    <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
+                    <input class="form-control me-2" id="search-input" name="search" type="text" value="<%= selectedFilters.search %>" placeholder="Search" aria-label="Search" aria-describedby="basic-addon1">
+                </fieldset>
+                <fieldset class="order input-group mt-3">
+                    <label class="input-group-text" for="sort"><i class="fas fa-sort"></i> Sort by: </label>
+                    <select name="sort" id="sort" class="form-select">
+                        <% if(selectedFilters.sort === "none"){ %>
+                            <option value="none" selected>-</option>
+                            <% } else{ %>  
+                            <option value="none">-</option>
+                        <% } %>
+                        <% if(selectedFilters.sort === "asc"){ %>
+                            <option value="asc" selected>Ascending price</option>
+                            <% } else{ %>  
+                            <option value="asc">Ascending price</option>
+                        <% } %>
+                        <% if(selectedFilters.sort === "desc"){ %>
+                            <option value="desc" selected>Descending price</option>
+                            <% } else{ %>  
+                            <option value="desc">Descending price</option>
+                        <% } %>
+                    </select>
+                </fieldset>
+                <div class="filter-toggle mt-3">
+                    <button id="toggle-filters" class="filter-btn btn btn-outline-secondary">Filter <i class="fas fa-filter"></i></button>
+                </div>
+            </div>
+        
+        <div class="filter"> 
+           
+
+            <form action="/phones" id="filter-form" class="hide-form filter-form" method="get">
+                <input type="hidden" id="hidden-search" name="search"/>
+                <input type="hidden" id="hidden-sort" name="sort"/>
+                <p class="filter-title mt-3">Filter the phones</p>
+                <fieldset id="filter-brand">
+                    <legend>Brand:</legend>
+                    <% for(let i = 0; i < filters.brand.length; i++) {%>
+                        <% if(selectedFilters.brand.includes(filters.brand[i])){ %>
+                            <input type="checkbox" id="<%= filters.brand[i] %>" name="brand[]" value="<%= filters.brand[i] %>" checked>
+                            <% } else{ %>  
+                            <input type="checkbox" id="<%= filters.brand[i] %>" name="brand[]" value="<%= filters.brand[i] %>">
+                        <% } %>
+                        <label><%= filters.brand[i] %></label>
+                        <br>
+                    <% } %>
+                </fieldset>
+                <fieldset id="filter-price" class="mt-2">
+                    <legend>Price:</legend>
+                    <% if(selectedFilters.price_range === "0_700"){ %>
+                        <input type="radio" name="price_range" id="range_0_700" value="0_700" checked><label>0-700 RON</label>
+                        <% } else{ %>  
+                        <input type="radio" name="price_range" id="range_0_700" value="0_700"><label>0-700 RON</label>
+                    <% } %>
+                    <br>
+                    <% if(selectedFilters.price_range === "701_4000"){ %>
+                        <input type="radio" name="price_range" id="range_701_4000" value="701_4000" checked><label>701-4000 RON</label>
+                        <% } else{ %>  
+                            <input type="radio" name="price_range" id="range_701_4000" value="701_4000"><label>701-4000 RON</label>
+                    <% } %>
+                    <br>
+                    <% if(selectedFilters.price_range === "4001"){ %>
+                        <input type="radio" name="price_range" id="range_4001_" value="4001" checked><label>Above 4000 RON</label>
+                        <% } else{ %>  
+                            <input type="radio" name="price_range" id="range_4001_" value="4001"><label>Above 4000 RON</label>
+                    <% } %>
+
+                </fieldset>
+                <fieldset id="filter-rating" class="mt-2">
+                    <legend>Minimum rating:</legend>
+                    <input type="number" value="<%= selectedFilters.minimum_rating %>" name="minimum_rating" id="minimum_rating" min="0" max="5">
+                </fieldset>
+                <fieldset id="filter-os" class="mt-2">
+                    <legend>Operating system:</legend>
+                    <% for(let i = 0; i < filters.os.length; i++) {%>
+                        <% if(selectedFilters.os.includes(filters.os[i])){ %>
+                            <input type="checkbox" id="<%= filters.os[i] %>" name="os[]" value="<%= filters.os[i] %>" checked>
+                            <% } else{ %>  
+                            <input type="checkbox" id="<%= filters.os[i] %>" name="os[]" value="<%= filters.os[i] %>">
+                        <% } %>
+                        <label><%= filters.os[i] %></label>
+                        <br>
+                    <% } %>
+                </fieldset>
+                <fieldset id="filter-stock" class="mt-2">
+                    <legend>In stock:</legend>
+                    <% if(selectedFilters.in_stock === "true"){ %>
+                        <input type="checkbox" name="stock_yes" id="stock_yes" value="true" checked><label>Yes</label>
+                    <% } else{ %>  
+                        <input type="checkbox" name="stock_yes" id="stock_yes" value="true"><label>Yes</label>
+                    <% } %>
+                </fieldset>
+                <div class="filter-form-buttons d-flex justify-content-between">
+                    <input type="submit" id="submit-form" class="mt-3" value="Submit">
+                    <input type="reset" id="reset" class="mt-3" value="Reset filters">
+                </div>
+                
+            </form>
+        </div>
+        
+    </div>
+    <div id="container" class="container mt-3 mb-3">
+        <% if(products.length > 0){ %>
+            <div class="row" id="phone-row">
+                <% for(let i = 0; i < products.length; i++) {%>
+                    <div class="phone-card col-lg-3 col-md-4 col-sm-6 col-12 g-3">
+                        <div class="phone-img d-flex justify-content-center align-items-center">
+                            <img src="images/<%= products[i].image %>" alt="Phone placeholder">
+                        </div>
+                        <div class="phone-info">
+                            <h3 class="title"><%= products[i].brand %></h3>
+                            <h4 class="subtitle"><%= products[i].name %></h4>
+                            <p>from</p>
+                            <% if(products[i].discount > 0){ %>
+                                <h5>Price : <span class="discounted"><%= products[i].price %></span> <%= products[i].price - products[i].discount %> RON</h5>
+                            <% } else{ %>  
+                                <h5>Price : <%= products[i].price %> RON</h5>
+                            <% } %>
+                            
+                            <a href="/phone/<%= products[i].name %>" class="phone-link mb-2">
+                                <button class="btn btn-danger">See product details  &gt;</button>
+                            </a>
+                        </div>
+                    </div>
+                <% } %>
+            <% } else{ %>
+                <p>No products found</p>
+            <% } %>
+        </div>
+
+    </div>
+    <% if(admin){ %>
+    <div class="add-phone mt-5 mb-3 text-center">
+        <button class="btn btn-outline-danger" id="display-add-form">Add new phone</button>
+    </div>
+    <div id="new-phone-container" class ="new-phone hide d-flex justify-content-center flex-column align-items-center text-left">
+        <form class="new-phone-form" id="new-phone-form" action="/phones">
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="add-brand" id="basic-addon1">Brand*</span>
+                <input id="add-brand" name="brand" type="text" class="form-control" placeholder="ex. : Samsung" aria-label="ex. : Samsung" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="add-name" id="basic-addon1">Name*</span>
+                <input id="add-name" name="name" type="text" class="form-control" placeholder="ex. : Galaxy S21" aria-label="ex. : Galaxy S21" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="add-os" id="basic-addon1">OS*</span>
+                <input id="add-os" name="os" type="text" class="form-control" placeholder="ex. : Android, iOS" aria-label="ex. : Android, iOS" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="add-price" id="basic-addon1">Price*</span>
+                <input id="add-price" name="price" type="text" class="form-control" placeholder="ex. : 899" aria-label="ex. : 899" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="add-discount" id="basic-addon1">Discount</span>
+                <input id="add-discount" name="discount" type="text" class="form-control" placeholder="ex. : 250" aria-label="ex. : 250" aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="add-quantity" id="basic-addon1">Quantity*</span>
+                <input id="add-quantity" name="quantity" type="text" class="form-control" placeholder="ex. : 100" aria-label="ex. : 100" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="add-date" id="basic-addon1">Availability date*</span>
+                <input id="add-date" type="text" name="date" class="form-control" placeholder="ex. : 2021-08-13" aria-label="ex. : 2021-08-13" aria-describedby="basic-addon1" required>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" for="add-rating" id="basic-addon1">Rating</span>
+                <input id="add-rating" name="rating" type="text" class="form-control" placeholder="ex. : 4.5" aria-label="ex. : 4.5" aria-describedby="basic-addon1">
+            </div>
+            <div class="add-new-buttons d-flex justify-content-between">
+                <button type="submit" id="add-phone" class="btn btn-danger text-center" disabled>Add</button>
+                <button type="button" id="cancel-add" class="btn btn-dark text-center">Cancel</button>
+            </div>
+            
+        </form>
+    </div>
+    <% } %>
+    <%- include('./partials/_scripts'); %>
+    <script src="javascripts/store.js"></script>
+</body>
+</html>

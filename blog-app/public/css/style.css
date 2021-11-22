@@ -1,0 +1,240 @@
+*{
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Montserrat', sans-serif;
+}
+.container {
+    width: 1280px;
+    margin : 100px auto 0 auto;
+}
+
+.nav__container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom:130px;
+}
+
+.nav__item {
+    padding-left: 100px;
+    font-size:11px;
+    text-transform: uppercase;
+}
+
+.nav__item:hover {
+    text-decoration: underline;
+}
+
+.nav__link {
+    text-decoration: none;
+    color:#1e1e1e;
+}
+
+img {
+    width: 1280px;
+    height: 720px;
+}
+
+.add__container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom:90px;
+}
+
+.button {
+    border: 1px solid #9B9B9B;
+    border-radius: 50px;
+    width: 300px;
+    height: 60px;
+    color:#1E1E1E;
+    font-size: 14px;
+    line-height: 18px;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    background-color: white;
+    cursor: pointer;
+}
+
+.button a {
+    text-decoration: none;
+    color:#1E1E1E;
+}
+
+.title {
+    text-align: center;
+    color:#1E1E1E;
+    font-size:46px;
+    line-height: 57px;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.info__container {
+    display: flex;
+    justify-content: center;
+    margin-top:30px;
+    margin-bottom: 40px;
+}
+
+.info__item {
+    color:#9B9B9B;
+    font-size:14px;
+    line-height: 18px;
+    padding:0 20px
+}
+
+.info__mark {
+    color: #1E1E1E;
+}
+
+.actions__container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.actions__btn {
+    color:#1E1E1E;
+    font-size:14px;
+    line-height: 18px;
+    background-color: white;
+    border:none;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+}
+
+.actions__btn:first-child {
+    border-right:1px solid #1E1E1E;
+    border-radius: 0;
+}
+
+.content__container {
+    margin-top:80px;
+    margin-bottom: 140px;
+    color:#1E1E1E;
+    font-family: 'Cardo', serif;
+    font-size:16px;
+    line-height: 30px;
+    text-align: justify;
+}
+
+.content__container p {
+    width: 70%;
+    margin:auto;
+}
+
+.content__container p:not(:last-child) {
+    margin-bottom:30px;
+}
+
+.readmore__container {
+    display: flex;
+    justify-content: center;
+}
+
+main article:not(:first-child){
+    margin-top:100px;
+}
+
+.footer {
+    margin-top:35px;
+    margin-bottom:100px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer__link {
+    font-family: 'Montserrat', sans-serif;
+    font-size:34px;
+    line-height: 42px;
+    color: #1E1E1E;
+    border:none;
+    background-color: white;
+    cursor: pointer;
+}
+
+.modal__overlay {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 50px 75px;
+    width: 1000px;
+    height: 750px;
+    background-color: #ffffff;
+    margin: auto;
+    border:1px solid #9B9B9B;
+    box-shadow: 0 0 26px 6px;
+}
+
+.inputs__container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+.input {
+    width: 400px;
+    padding-left:10px;
+    height: 35px;
+    border: 1px solid #9B9B9B;
+    border-radius: 5px;
+    margin-bottom: 25px;
+    color:#9b9b9b;
+    font-family: 'Cardo', serif;
+    font-size: 18px;
+    line-height: 25px;
+}
+
+.textarea {
+    width: 850px;
+    height:280px;
+    border:1px solid #9B9B9B;
+    border-radius: 5px;
+    padding-left: 10px;
+    color:#9b9b9b;
+    font-family: 'Cardo', serif;
+    font-size: 18px;
+    line-height: 25px;
+    margin-bottom:25px;
+    resize: none;
+}
+
+.modal__buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button--pink {
+    background-color: #FFE3E3;
+}
+
+/* DETAILS PAGE */
+
+.saying {
+    font-family: 'Montserrat', sans-serif;
+    margin:75px auto !important;
+    padding: 105px 0;
+    background-color: #FFE3E3;
+    color:#000000;
+    font-size: 28px;
+    line-height: 30px;
+    text-align: center;
+    width: 100% !important;
+    font-style: italic;
+}

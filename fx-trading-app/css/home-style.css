@@ -1,0 +1,195 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --color-green: #75D8A6;
+    --color-blue: #3496f0;
+    --color-yellow: #F0AD4E;
+    --color-red: #d9534f;
+    --color-light-grey : #dddddd;
+    --color-dark-grey : #7c7c7c;
+}
+
+.page-container {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.container {
+    max-width: unset;
+}
+
+.row {
+    margin:0;
+}
+
+.navbar img {
+    width: 50px;
+    height: auto;
+}
+
+.navbar {
+    border-bottom:1px solid grey;
+}
+
+.logout-btn {
+    height: 25px;
+    width: 70px;
+    font-size: 11px;
+    text-align: center;
+    padding: 0;
+    border-color: var(--color-light-grey);
+}
+
+/* CARD STYLES */
+
+.card {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 47%;
+}
+
+.title {
+    font-size:15px;
+    color:var(--color-dark-grey);
+    font-weight: bold;
+}
+
+.btn-close {
+    font-size:8px;
+}
+
+.card-body{
+    padding:0.5rem 0;
+}
+
+.primary-currency {
+    font-size:19px;
+}
+
+.card-buttons button, .pick-currency-button button{
+    width:75px;
+    height: 30px;
+    padding: 0;
+    font-size: 12px;
+}
+
+.main-header, .buy-sell, .card-body, .pick-currency-header {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.card-input .input-group-text {
+    width: 60px;
+    border:none;
+    background-color: white;
+    font-size:13px;
+    padding-left: 0;
+}
+
+.pick-currency-input .input-group-text {
+    width: 70px;
+    border:none;
+    background-color: white;
+    font-size:13px;
+    padding-left: 0;
+}
+
+.pick-currency-card-body {
+    border-top:1px solid var(--color-light-grey)
+}
+
+.sell span, .buy span {
+    font-size:14px;
+    color:var(--color-dark-grey)
+}
+
+.form-control, .form-select {
+    height: 33px;
+    font-size:13px;
+}
+
+.pick-currency-title {
+    font-size: 15px;
+    color:var(--color-dark-grey)
+}
+
+.fa-exchange-alt {
+    color: var(--color-yellow);
+    font-size:11px;
+}
+
+.fa-sort-down {
+    color: var(--color-red);
+}
+
+.fa-sort-up {
+    color: var(--color-green);
+}
+
+.buy-sell {
+    border-top:1px solid var(--color-light-grey);
+    border-bottom:1px solid var(--color-light-grey);
+}
+
+.btn-success {
+    background-color: var(--color-green);
+    border :none;
+}
+
+.btn-primary {
+    background-color: var(--color-blue);
+    border :none;
+}
+
+.fa-plus {
+    color:var(--color-light-grey)
+}
+
+
+/* TABLE STYLES */
+
+table {
+    font-size:13px;
+}
+
+.filter-title h5 {
+    font-size:15px;
+    font-weight: bold;
+    padding-top: 7px;
+    color:var(--color-dark-grey);
+}
+
+.filter-title {
+    border-right:1px solid var(--color-light-grey);
+    align-content: center;
+}
+
+.filters-input .input-group-text{
+    background-color: white;
+    border:none;
+    font-size:14px;
+    color:var(--color-dark-grey)
+}
+
+table thead {
+    background-color: var(--color-blue);
+    color:white;
+}
+
+.table>:not(:first-child) {
+    border-top:none;
+}
+
+.table-container {
+    border-top:1px solid var(--color-light-grey)
+}
+
+/* MEDIA QUERIES */
+
+@media (max-width: 557px){
+    .card {
+        width:100%;
+    }
+}
