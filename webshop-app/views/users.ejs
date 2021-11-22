@@ -4,29 +4,38 @@
 <body>
     <%- include('./partials/_nav'); %>
     <main class="main">
-        <ol class="list-group list-group-numbered">
-            <% for(var i = 0; i < users.length; i++) {%>
-                <li class="list-group-item d-flex justify-content-between align-items-start" id="item-<%= users[i].id %>">
-                    <div class="ms-2 me-auto">
-                        <p class="name fw-bold"><%= users[i].name %></p>
-                        <p class="username fst-italic">#<%= users[i].username %></p>
+        <% if(admin){ %>
+            <ol class="list-group list-group-numbered">
+                <% for(var i = 0; i < users.length; i++) {%>
+                    <li class="list-group-item d-flex justify-content-between align-items-start" id="item-<%= users[i].id %>">
+                        <div class="ms-2 me-auto">
+                            <p class="name fw-bold"><%= users[i].name %></p>
+                            <p class="username fst-italic">#<%= users[i].username %></p>
+                        </div>
+                        <button class="btn-collapse btn btn-outline-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= users[i].id %>" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fas fa-chevron-circle-down"></i>
+                        </button>
+                        <button class="btn-delete btn btn-outline-danger" type="button" id="<%= users[i].id %>">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </li>
+                    <div class="collapse" id="collapse<%= users[i].id %>">
+                        <div class="card card-body">
+                          <p>Email: <span class="fw-light fst-italic"><%= users[i].email %></span></p>
+                          <p>Phone: <span class="fw-light fst-italic"><%= users[i].phone %></span></p>
+                          <p>Address: <span class="fw-light fst-italic"><%= users[i].address.street %> street, <%= users[i].address.suite %>, <%= users[i].address.zipcode %>, <%= users[i].address.city %></span></p>
+                        </div>
                     </div>
-                    <button class="btn-collapse btn btn-outline-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= users[i].id %>" aria-expanded="false" aria-controls="collapseExample">
-                        <i class="fas fa-chevron-circle-down"></i>
-                    </button>
-                    <button class="btn-delete btn btn-outline-danger" type="button" id="<%= users[i].id %>">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </li>
-                <div class="collapse" id="collapse<%= users[i].id %>">
-                    <div class="card card-body">
-                      <p>Email: <span class="fw-light fst-italic"><%= users[i].email %></span></p>
-                      <p>Phone: <span class="fw-light fst-italic"><%= users[i].phone %></span></p>
-                      <p>Address: <span class="fw-light fst-italic"><%= users[i].address.street %> street, <%= users[i].address.suite %>, <%= users[i].address.zipcode %>, <%= users[i].address.city %></span></p>
-                    </div>
-                </div>
-            <% } %>
-            </ol>
+                <% } %>
+                </ol>
+        <% } else{ %>
+            <div class="text-center mt-5">
+                <h3>You're not allowed on this page</h3>
+                <a href="/">Go back to Home page</a>
+            </div>
+            
+        <% } %>
+        
     </main>
     <%- include('./partials/_scripts'); %>
     <script src="javascripts/users.js"></script>

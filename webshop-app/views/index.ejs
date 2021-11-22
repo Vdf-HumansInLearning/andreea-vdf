@@ -3,14 +3,21 @@
   <%- include('./partials/_head'); %>
 <body>
     <%- include('./partials/_nav'); %>
-    <main class="main d-flex justify-content-start align-items-center row">
-        <div class="col-1">
+    
+    <main class="main">
+        <% if(logged_in){ %>
+            <p class="text-white p-2">Hello, <%= username %></p>
+        <% } %>
+        <div class="main-content d-flex justify-content-start align-items-center row">
+            <div class="col-1">
+            </div>
+            <div class="col-md-4 col-sm-8 col-11">
+                <h3 class="text-white">Discover our offers for mobile phones</h3>
+                <a href="/phones"><button type="button" class="btn btn-outline-light mt-2">See more</button></a>
+            </div>
+            <div class="col-7"></div>
         </div>
-        <div class="col-md-4 col-sm-8 col-11">
-            <h3 class="text-white">Discover our offers for mobile phones</h3>
-            <a href="/phones"><button type="button" class="btn btn-outline-light mt-2">See more</button></a>
-        </div>
-        <div class="col-7"></div>
+        
         
     </main>
 

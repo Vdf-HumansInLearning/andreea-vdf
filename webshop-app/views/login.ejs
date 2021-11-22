@@ -9,7 +9,7 @@
         <div class="invalid bg-danger mt-3 d-none" id="invalid">
             <p class="text-white p-2 m-0">The username or the password is incorrect! Please try again.</p>
         </div>
-        <form class="login-form mt-4" id="login-form" action="/login" method="post">
+        <form class="login-form mt-4" id="login-form" action="/auth/login" method="post">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
                 <input type="text" id="username" name="username" class="form-control" placeholder="username" aria-label="Username" aria-describedby="basic-addon1" required>
@@ -19,7 +19,7 @@
                 <input type="password" id="password" name="password" class="form-control" placeholder="password" aria-label="Password" aria-describedby="basic-addon1" required>
             </div>
             <button type="submit" class="btn btn-outline-danger w-100 mt-3">Login</button>
-            <div id="registerHelp" class="form-text text-center">You don't have an account? <a href="/register" class="register-link text-danger">Register</a></div>
+            <div id="registerHelp" class="form-text text-center">You don't have an account? <a href="/auth/register" class="register-link text-danger">Register</a></div>
         </form>
         <% } else{ %>  
             <h3 class="main-title">You are already logged in.</h3>

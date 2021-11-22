@@ -13,14 +13,14 @@ router.get('/', function(req, res, next) {
   if(req.cookies.user_role && req.cookies.user_id){
     logged_in = true;
     let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
-    user = users.filter(user => user.id === Number(req.cookies.user_id));
+    user = users.find(user => user.id === Number(req.cookies.user_id));
   }
   res.render('profile', { 
     title: 'Profile',
     css: 'stylesheets/profile-style.css',
     navHtml: '',
     logged_in : logged_in,
-    user : user[0],
+    user : user,
     admin : admin
   });
 });

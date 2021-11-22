@@ -13,13 +13,13 @@ router.get('/:phone', function(req, res, next) {
     logged_in = true;
   }
   let content = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
-  let phone = content.filter(item => item["name"] === req.params.phone);
-  let avgRating = getAverageRatingBySelectedBrand(phone[0].brand);
+  let phone = content.find(item => item["name"] === req.params.phone);
+  let avgRating = getAverageRatingBySelectedBrand(phone.brand);
   res.render('details', { 
     title: 'Details',
     css: 'stylesheets/details-style.css',
     navHtml: '',
-    phone : phone[0],
+    phone : phone,
     average : avgRating,
     admin: admin,
     logged_in: logged_in

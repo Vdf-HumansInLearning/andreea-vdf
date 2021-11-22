@@ -6,7 +6,7 @@
     <div class="container d-flex justify-content-center flex-column align-items-center mt-5" id="container">
         <% if(registered === false){ %>
         <h1 class="main-title">Register a new account</h1>
-        <form class="register-form mb-3" id="register-form" action="/register" method="post">
+        <form class="register-form mb-3" id="register-form" action="/auth/register" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" name="username" placeholder="Username" class="form-control" id="username" aria-describedby="usernameHelp" required>
@@ -28,7 +28,7 @@
                 <input type="password" name="password" placeholder="Password" class="form-control" id="password" required>
             </div>
             <div class="invalid-feedback mb-2" id="invalid-password">
-                The password should contain minimum 8 characters, at least one digit and one special character.
+                The password needs to include both lower and upper case characters, include at least one number and one special character and be at least 8 characters long.
             </div>
             <div class="mb-3">
                 <label for="confirm-password" class="form-label">Confirm password</label>
@@ -38,7 +38,7 @@
                 The passwords don't match.
             </div>
             <button type="submit" class="btn btn-outline-danger w-100">Register</button>
-            <div id="registerHelp" class="form-text text-center">Already have an account? <a href="/login" class="register-link text-danger">Login</a></div>
+            <div id="registerHelp" class="form-text text-center">Already have an account? <a href="/auth/login" class="register-link text-danger">Login</a></div>
         </form>
         <% } else{ %>  
             <h3 class="main-title">You are already registered.</h3>

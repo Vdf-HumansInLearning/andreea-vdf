@@ -6,3 +6,9 @@
     background-size: cover;
     margin: 0;
 }
+
+.main-content {
+    width: 100%;
+    height: calc(100vh - 112px);
+    margin: 0;
+}

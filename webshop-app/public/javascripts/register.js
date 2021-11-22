@@ -12,14 +12,23 @@ if(form) {
         let password = document.getElementById("password");
         if(regex.test(firstName.value) && regex.test(lastName.value)) {
             document.getElementById("invalid-name").style.display = "none";
-            form.submit();
-            fetch(`http://localhost:3000/register?username=${username.value}&first_name=${firstName.value}&last_name=${lastName.value}&email=${email.value}&password=${password.value}`,{
-                method: 'post'
+            // form.submit();
+            fetch(form.action,{
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username : username.value, first_name : firstName.value, last_name : lastName.value, email : email.value, password : password.value})
             })
             .then(data => {
                 console.log(data);
+                if(data.status === 200){
+                    localStorage.setItem("register_status", 200);
+                    window.location.href = "http://localhost:3000/auth/login";
+                }
+                
             })
-            window.location.href = "http://localhost:3000/login";
+            
         } else {
             document.getElementById("invalid-name").style.display = "block";
         }
@@ -42,10 +51,8 @@ if(form) {
             let regex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
             if(regex.test(passwordInput.value) === false){
                 document.getElementById("invalid-password").style.display = "block";
-                console.log("not ok");
                 confirmPassword.disabled = true;
             } else {
-                console.log("ok");
                 document.getElementById("invalid-password").style.display = "none";
                 confirmPassword.disabled = false;
             }
