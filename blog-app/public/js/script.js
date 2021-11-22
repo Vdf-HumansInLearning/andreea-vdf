@@ -283,12 +283,33 @@ let articles = [
 
 window.onload = function() {
 
+    document.documentElement.setAttribute('data-theme', 'light');
+    var Router = function(name, routes) {
+        return {
+            name: name,
+            routes: routes
+        }
+    };
+
+    var myRouter = new Router('myRouter', [
+    {
+        path: '/',
+        name: 'Root'
+    },
+    {
+        path: '/article',
+        name: 'Article'
+    }
+    ]);
+
+    console.log(myRouter);
 
     var currentPath = window.location.pathname;
     console.log(currentPath);
-    displayHtml(currentPath);
+    var route = myRouter.routes.find(route => route.path === currentPath);
+    displayHtml(route);
 
-    if(currentPath === "/") {
+    if(route.path === "/") {
         const ADDBTN = document.getElementById("add-article");
         const CANCELBTN = document.getElementById("cancel");
         const SAVEBTN = document.getElementById("save");
@@ -306,51 +327,91 @@ window.onload = function() {
             MODAL.style.display = "none";
         });
     }
+
+    document.getElementById("theme-btn").addEventListener("click", function() {
+        
+        console.log(document.getElementById("theme-btn").childNodes[0].id);
+        if(document.getElementById("theme-btn").childNodes[0].id === "dark-icon"){
+            document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
+            let lightIcon = document.createElement("i");
+            lightIcon.setAttribute("class","far fa-sun");
+            lightIcon.setAttribute("id","light-icon");
+            document.getElementById("theme-btn").appendChild(lightIcon);
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
+            let darkIcon = document.createElement("i");
+            darkIcon.setAttribute("class","far fa-moon");
+            darkIcon.setAttribute("id","dark-icon");
+            document.getElementById("theme-btn").appendChild(darkIcon);
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+        
+    });
     
 }
 
 
 //FUNCTIONS
 
-function displayHtml(path) {
+function displayHtml(route) {
     let body = document.getElementsByTagName("body")[0];
     console.log(body);
-
-    if(path === "/article") {
-        const urlParams = new URLSearchParams(window.location.search);
-        const articleId = urlParams.get('id');
-        console.log(window.location.search);
-        console.log(articleId);
-        let article = articles.filter(item => item.id === Number(articleId));
-        console.log(article);
-
-        let containerDiv = document.createElement("div");
-        containerDiv.setAttribute("class","container");
-        containerDiv.appendChild(createNav());
-
-        let main = document.createElement("main");
-        main.setAttribute("class","main");
-        main.appendChild(createArticleDetails(article[0]));
-
-        containerDiv.appendChild(main);
-        containerDiv.appendChild(createFooterDetails());
-        body.appendChild(containerDiv);
-    } else if (path === "/") {
-        let containerDiv = document.createElement("div");
-        containerDiv.setAttribute("class","container");
-        containerDiv.appendChild(createNav());
-        containerDiv.appendChild(createAddArticleContainer());
-
-        let main = document.createElement("main");
-        main.setAttribute("class","main");
-        for(let i=0; i< articles.length;i++){
-            main.appendChild(createArticleHome(articles[i]));
+    if(route) {
+        if(route.path === "/article") {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+            console.log(window.location.search);
+            console.log(articleId);
+            let article = articles.filter(item => item.id === Number(articleId));
+            console.log(article);
+    
+            let containerDiv = document.createElement("div");
+            containerDiv.setAttribute("class","container");
+            let themeButton = document.createElement("button");
+            themeButton.setAttribute("class","theme-btn");
+            themeButton.setAttribute("id","theme-btn");
+            let darkIcon = document.createElement("i");
+            darkIcon.setAttribute("class","far fa-moon");
+            darkIcon.setAttribute("id","dark-icon");
+            themeButton.appendChild(darkIcon);
+            containerDiv.appendChild(themeButton);
+            containerDiv.appendChild(createNav());
+    
+            let main = document.createElement("main");
+            main.setAttribute("class","main");
+            main.appendChild(createArticleDetails(article[0]));
+    
+            containerDiv.appendChild(main);
+            containerDiv.appendChild(createFooterDetails());
+            body.appendChild(containerDiv);
+        } else if (route.path === "/") {
+            let containerDiv = document.createElement("div");
+            containerDiv.setAttribute("class","container");
+            
+            let themeButton = document.createElement("button");
+            themeButton.setAttribute("class","theme-btn");
+            themeButton.setAttribute("id","theme-btn");
+            let darkIcon = document.createElement("i");
+            darkIcon.setAttribute("class","far fa-moon");
+            darkIcon.setAttribute("id","dark-icon");
+            themeButton.appendChild(darkIcon);
+            containerDiv.appendChild(themeButton);
+            containerDiv.appendChild(createNav());
+            containerDiv.appendChild(createAddArticleContainer());
+    
+            let main = document.createElement("main");
+            main.setAttribute("class","main");
+            for(let i=0; i< articles.length;i++){
+                main.appendChild(createArticleHome(articles[i]));
+            }
+            containerDiv.appendChild(main);
+            containerDiv.appendChild(createFooterHome());
+            containerDiv.appendChild(createModal());
+            body.appendChild(containerDiv);
         }
-        containerDiv.appendChild(main);
-        containerDiv.appendChild(createFooterHome());
-        containerDiv.appendChild(createModal());
-        body.appendChild(containerDiv);
-    } else {
+    }
+     else {
         body.innerHTML = "404 Not Found"
     }
     
