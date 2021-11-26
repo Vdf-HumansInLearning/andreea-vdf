@@ -32,14 +32,15 @@ if(collapseBtn) {
 let deleteBtn = document.querySelectorAll(".btn-delete");
 if(deleteBtn){
     deleteBtn.forEach(item => {
+
         item.addEventListener('click', () => {
-            fetch(`/user/${item.id}`, {
-            method: 'DELETE',
-            }).then(data => {
-                window.location.reload();
+            document.getElementById("delete-user").addEventListener('click', function(e) {
+                fetch(`/user/${item.id}`, {
+                    method: 'DELETE',
+                    }).then(data => {
+                        window.location.reload();
+                    });
             });
-            // document.getElementById(`item-${item.id}`).remove();
-            // document.getElementById(`collapse${item.id}`).remove();
         })
     })
 }

@@ -59,6 +59,8 @@ if(localStorageItems && localStorageObject.length > 0){
             let removeDiv = document.createElement("div");
             let removeBtn = document.createElement("button");
             removeBtn.setAttribute("class","delete-item");
+            removeBtn.setAttribute("data-bs-toggle","modal");
+            removeBtn.setAttribute("data-bs-target","#confirm-delete");
             let removeIcon = document.createElement("i");
             removeIcon.setAttribute("class","far fa-trash-alt");
             removeBtn.appendChild(removeIcon);
@@ -94,6 +96,52 @@ if(localStorageItems && localStorageObject.length > 0){
     orderBtn.textContent = "Place Order";
     orderBtnDiv.appendChild(orderBtn);
     document.getElementById("container").appendChild(orderBtnDiv);
+
+   
+    let modalDiv = document.createElement("div");
+    modalDiv.setAttribute("class","modal");
+    modalDiv.setAttribute("id","confirm-delete");
+    modalDiv.setAttribute("role","dialog");
+    let modalDialogDiv = document.createElement("div");
+    modalDialogDiv.setAttribute("class","modal-dialog modal-dialog-centered");
+
+    let modalContent = document.createElement("div");
+    modalContent.setAttribute("class","modal-content");
+    let modalHeader = document.createElement("div");
+    modalHeader.setAttribute("class","modal-header");
+    let modalHeaderH5 = document.createElement("h5");
+    modalHeaderH5.setAttribute("class","modal-title");
+    modalHeaderH5.textContent = "Are you sure you want to delete this item?";
+    let modalHeaderBtn = document.createElement("button");
+    modalHeaderBtn.setAttribute("class","btn-close");
+    modalHeaderBtn.setAttribute("type","button");
+    modalHeaderBtn.setAttribute("data-bs-dismiss","modal");
+    modalHeaderBtn.setAttribute("aria-label","Close");
+    modalHeader.appendChild(modalHeaderH5);
+    modalHeader.appendChild(modalHeaderBtn);
+    let modalBody = document.createElement("div");
+    modalBody.setAttribute("class","modal-body");
+    let modalFooter = document.createElement("div");
+    modalFooter.setAttribute("class","modal-footer d-flex justify-content-between");
+    let modalFooterCancelBtn = document.createElement("button");
+    modalFooterCancelBtn.setAttribute("class","btn btn-secondary");
+    modalFooterCancelBtn.setAttribute("type","button");
+    modalFooterCancelBtn.setAttribute("data-bs-dismiss","modal");
+    modalFooterCancelBtn.textContent = "Close";
+    let modalFooterDeleteBtn = document.createElement("button");
+    modalFooterDeleteBtn.setAttribute("id","delete-user");
+    modalFooterDeleteBtn.setAttribute("type","button");
+    modalFooterDeleteBtn.setAttribute("class","btn btn-danger");
+    modalFooterDeleteBtn.textContent = "Delete item";
+    modalFooter.appendChild(modalFooterCancelBtn);
+    modalFooter.appendChild(modalFooterDeleteBtn);
+    modalContent.appendChild(modalHeader);
+    modalContent.appendChild(modalBody);
+    modalContent.appendChild(modalFooter);
+    modalDialogDiv.appendChild(modalContent);
+    modalDiv.appendChild(modalDialogDiv);
+    document.getElementById("container").appendChild(modalDiv);
+
 
     const minusBtns = document.querySelectorAll(".minus-btn");
     const plusBtns = document.querySelectorAll(".plus-btn");
@@ -149,7 +197,8 @@ if(localStorageItems && localStorageObject.length > 0){
     console.log(deleteBtns);
     deleteBtns.forEach(item => {
         item.addEventListener("click", () => {
-            let total = 0;
+            document.getElementById("delete-user").addEventListener('click', function(e) {
+                let total = 0;
                 for(let i=0;i<localStorageObject.length;i++){
                     if(localStorageObject[i].name === item.parentElement.parentElement.firstChild.textContent.slice(2)){
                         localStorageObject.splice(i, 1);
@@ -167,7 +216,15 @@ if(localStorageItems && localStorageObject.length > 0){
                 } else {
                     window.location.reload();
                 }
+            });
+            
         });
+    });
+
+    orderBtn.addEventListener("click", () => {
+        localStorage.removeItem("items");
+        alert("You ordered!");
+        window.location.reload();
     });
 } else {
     localStorage.removeItem("items");

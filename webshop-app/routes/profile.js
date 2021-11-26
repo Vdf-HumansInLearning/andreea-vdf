@@ -5,7 +5,6 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   let admin = false;
   let logged_in = false;
-  console.log(req.cookies);
   let user = [];
   if(req.cookies.user_role === "admin"){
     admin = true;
@@ -17,7 +16,6 @@ router.get('/', function(req, res, next) {
     .then(function (response) {
       // handle success
       const user = response.data;
-      console.log(user);
       username = user.username;
 
       res.render('profile', { 

@@ -3,7 +3,6 @@ var router = express.Router();
 const axios = require('axios').default;
 
 router.get('/', function(req, res, next) {
-  console.log('Cookies: ', req.cookies);
   let admin = false;
   let logged_in = false;
   let username = "";
@@ -17,7 +16,6 @@ router.get('/', function(req, res, next) {
     .then(function (response) {
       // handle success
       const user = response.data;
-      console.log(user);
       username = user.username;
 
       res.render('index', { 

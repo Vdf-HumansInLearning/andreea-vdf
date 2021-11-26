@@ -57,8 +57,6 @@ router.get('/register', function(req, res, next) {
   
 router.post('/register', function(req, res, next) {
     
-    console.log(req.body);
-    
     axios.post(`http://localhost:3001/user/register`, {
       name: req.body.first_name + " " + req.body.last_name,
       username: req.body.username,

@@ -5,7 +5,6 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('Cookies: ', req.cookies);
   let admin = false;
   let logged_in = false;
   if(req.cookies.user_role === "admin"){
