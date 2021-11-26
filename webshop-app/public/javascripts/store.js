@@ -184,6 +184,9 @@ document.getElementById("phones-link").classList = "nav-link active";
                     case "Xiaomi" :
                         img_path += "toppng.com-xiaomi-smartphone-710x710.png";
                         break;
+                    case "Huawei" :
+                        img_path += "toppng.com-huawei-p8-1200x900.png";
+                        break;
                     default :
                         img_path = "";
             }

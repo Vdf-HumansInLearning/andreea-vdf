@@ -1,5 +1,6 @@
 var express = require('express');
 const fs = require('fs');
+const axios = require('axios').default;
 var router = express.Router();
 
 /* GET home page. */
@@ -13,95 +14,105 @@ router.get('/', function(req, res, next) {
   if(req.cookies.user_role && req.cookies.user_id){
     logged_in = true;
   }
-  var filters = {
-    brand : [],
-    os : []
-  }
+  axios.get('http://localhost:3001/phones')
+  .then(function (response) {
+    // handle success
+    var filters = {
+      brand : [],
+      os : []
+    }
+    
+    var selectedFilters = {
+      search : "",
+      sort : "",
+      brand : [],
+      price_range : "",
+      minimum_rating : 0,
+      os : [],
+      in_stock : 'false'
+    
+    }
   
-  var selectedFilters = {
-    search : "",
-    sort : "",
-    brand : [],
-    price_range : "",
-    minimum_rating : 0,
-    os : [],
-    in_stock : 'false'
+    // get phones array
+    let phones = response.data;
+    // let phones = content.products;
   
-  }
-
-  // get phones array
-  let phones = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
-  // let phones = content.products;
-
-  // get filters array
-  filters.brand = Array.from(arrayCheckboxes("brand",phones));
-  filters.os = Array.from(arrayCheckboxes("operating_system",phones));
+    // get filters array
+    filters.brand = Array.from(arrayCheckboxes("brand",phones));
+    filters.os = Array.from(arrayCheckboxes("operating_system",phones));
+    
+    // filter phones array by query params
   
-  // filter phones array by query params
-
-  var products;
-   if(req.query.sort === "none"){
-     products = filterProducts(phones,item => searchProducts(item,req.query.search) && getProductsByBrand(item,req.query.brand) && getProductsByPriceRange(item,req.query.price_range) && getProductsByOS(item,req.query.os) && getProductsByRating(item,req.query.minimum_rating) && getProductsByStock(item,req.query.stock_yes));
-   } else {
-     products = filterProducts(phones,item => searchProducts(item,req.query.search) && getProductsByBrand(item,req.query.brand) && getProductsByPriceRange(item,req.query.price_range) && getProductsByOS(item,req.query.os) && getProductsByRating(item,req.query.minimum_rating) && getProductsByStock(item,req.query.stock_yes), getSorted(req.query.sort));
-   }
-  // set selected filters from query
-  if(req.query.search){
-    selectedFilters.search = req.query.search;
-  }
-  if(req.query.sort){
-    selectedFilters.sort = req.query.sort;
-  }
-  if(req.query.brand){
-    selectedFilters.brand = req.query.brand;
-  }
-  if(req.query.price_range){
-    selectedFilters.price_range = req.query.price_range;
-  }
-  if(req.query.minimum_rating){
-    selectedFilters.minimum_rating = req.query.minimum_rating;
-  }
-  if(req.query.os){
-    selectedFilters.os = req.query.os;
-  }
-  if(req.query.stock_yes){
-    selectedFilters.in_stock = req.query.stock_yes;
-  }
-  
-  // send phones and filters to render method
-  res.render('phones', { 
-    title: 'Phones',
-    css: 'stylesheets/phones-style.css',
-    products: products,
-    filters : filters,
-    selectedFilters : selectedFilters,
-    admin : admin,
-    logged_in : logged_in
+    var products;
+     if(req.query.sort === "none"){
+       products = filterProducts(phones,item => searchProducts(item,req.query.search) && getProductsByBrand(item,req.query.brand) && getProductsByPriceRange(item,req.query.price_range) && getProductsByOS(item,req.query.os) && getProductsByRating(item,req.query.minimum_rating) && getProductsByStock(item,req.query.stock_yes));
+     } else {
+       products = filterProducts(phones,item => searchProducts(item,req.query.search) && getProductsByBrand(item,req.query.brand) && getProductsByPriceRange(item,req.query.price_range) && getProductsByOS(item,req.query.os) && getProductsByRating(item,req.query.minimum_rating) && getProductsByStock(item,req.query.stock_yes), getSorted(req.query.sort));
+     }
+    // set selected filters from query
+    if(req.query.search){
+      selectedFilters.search = req.query.search;
+    }
+    if(req.query.sort){
+      selectedFilters.sort = req.query.sort;
+    }
+    if(req.query.brand){
+      selectedFilters.brand = req.query.brand;
+    }
+    if(req.query.price_range){
+      selectedFilters.price_range = req.query.price_range;
+    }
+    if(req.query.minimum_rating){
+      selectedFilters.minimum_rating = req.query.minimum_rating;
+    }
+    if(req.query.os){
+      selectedFilters.os = req.query.os;
+    }
+    if(req.query.stock_yes){
+      selectedFilters.in_stock = req.query.stock_yes;
+    }
+    
+    // send phones and filters to render method
+    res.render('phones', { 
+      title: 'Phones',
+      css: 'stylesheets/phones-style.css',
+      products: products,
+      filters : filters,
+      selectedFilters : selectedFilters,
+      admin : admin,
+      logged_in : logged_in
+    });
+  })
+  .catch(function (error) {
+    // handle error
+    console.log(error);
   });
+  
 });
 
 router.post("/", function(req, res, next) {
   res.send(`Adding phone ${req.query.name}`);
-  // res.setHeader('Content-Type', 'application/json');
-  let content = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
-  content.push({
-    "name": req.query.name,
-    "brand": req.query.brand,
-    "operating_system": req.query.os,
-    "price": Number(req.query.price),
-    "discount": Number(req.query.discount),
-    "quantity": Number(req.query.quantity),
-    "availability_date":req.query.date,
-    "rating": Number(req.query.rating),
-    "image": req.query.imgUrl
-  });
-  fs.writeFile('./phones.json', JSON.stringify(content), function (err) { 
-    if (err){
-      console.log(err);
-    } else{
-      console.log('Write operation complete.');
-    }
+  axios.post('http://localhost:3001/phones', {
+    name: req.query.name,
+    brand: req.query.brand,
+    operating_system : req.query.os,
+    price : Number(req.query.price),
+    discount : Number(req.query.discount),
+    quantity : Number(req.query.quantity),
+    availability_date :req.query.date,
+    rating : Number(req.query.rating),
+    image : req.query.imgUrl
+  },{
+  "headers": {
+    "content-type": "application/json",
+  }})
+  .then(function (response) {
+    console.log(response);
   })
+  .catch(function (error) {
+    console.log(error);
+  });
+  
 })
 
 //FUNCTIONS

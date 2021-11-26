@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- displays site properly based on user's device -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reseter.css/1.0.8/reseter.min.css" integrity="sha512-w7sMEM5yzmuVP9ic9zpCLk/+whwrrhkH5g83x0wi5DEPo1y+/JniMmCVfbtjw5JipFpcCb4gyF2xLES6tc+TxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <title>Frontend Mentor | Tip calculator app</title>
+</head>
+<body>
+  <main class="main">
+    <div class="logo">
+      <img src="/images/logo.svg" alt="Logo image">
+    </div>
+    <div class="calculator">
+      <div class="selection-side">
+        <div class="label-container">
+          <label for="bill" class="label-primary">Bill</label>
+        </div>
+        <br>
+        <div class="input_container">
+          <input type="number" step="any" id="bill" name="bill" class="long-input">
+          <img src="/images/icon-dollar.svg" class="input-img">
+        </div>
+        
+        <br>
+        <label for="select-tip" class="label-primary">Select Tip %</label>
+        <br>
+        <div class="radio-container">
+          <input type="radio" id="radio5" name="radioTip" value="5">
+          <label for="radio5">5%</label> 
+          <input type="radio" id="radio10" name="radioTip" value="10">
+          <label for="radio10">10%</label>
+          <input type="radio" id="radio15" name="radioTip" value="15">
+          <label for="radio15">15%</label>
+          <input type="radio" id="radio25" name="radioTip" value="25">
+          <label for="radio25">25%</label>
+          <input type="radio" id="radio50" name="radioTip" value="50">
+          <label for="radio50">50%</label>
+          <input type="number" step="any" id="custom-tip" class="custom-tip" name="radioTip" placeholder="Custom">
+        </div>
+        <br>
+        <div class="label-container">
+          <label for="no-people" class="label-primary">Number of People</label>
+          <label class="error-primary" id="error-no-people">Can't be zero</label>
+        </div>
+        <br>
+        <div class="input_container">
+          <input type="number" step="any" id="no-people" name="no-people" class="long-input">
+          <img src="/images/icon-person.svg" class="input-img">
+        </div>
+      </div>
+      <div class="results-side">
+        <div class="tip-amount">
+          <div class="label">
+            <h2 class="label-title">
+              Tip Amount
+            </h2>
+            <p class="label-subtitle">/ person</p>
+          </div>
+          <div class="amount" id="tip-amount">
+            $0.00
+          </div>
+        </div>
+        <div class="total">
+          <div class="label">
+            <h2 class="label-title">
+              Total
+            </h2>
+            <p class="label-subtitle">/ person</p>
+          </div>
+          <div class="amount" id="total-amount">
+            $0.00
+          </div>
+        </div>
+        <button class="reset-btn disabled" id="reset-btn" disabled>Reset</button>
+      </div>
+    </div>
+  </main>
+  
+  <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
+    Coded by <a href="#">Andreea Pantu</a>.
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

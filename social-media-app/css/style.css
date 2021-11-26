@@ -1,0 +1,61 @@
+body {
+    background-color: #4E4187;
+    color: #F8FFE5;
+    font-family: Roboto;
+}
+header {
+    text-align: center;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 30px auto;
+    width: 100%; 
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    grid-gap: 1em;
+    background-color: #4E4187;
+}
+
+.container div {
+    text-align: center;
+    border: 2px solid #3083DC;
+    background-color: #F8FFE5;
+    width: 60%;
+    margin: auto;
+}
+
+.name {
+    color:#3083DC;
+    font-weight: bold;
+}
+
+.email {
+    color: #2EBFA5;
+}
+
+.avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    padding-top:10px;
+}
+
+.pagination {
+    text-align: center;
+    font-weight: bold;
+    font-size : 20px;
+}
+
+.page {
+    display: inline;
+    cursor: pointer;
+}
+
+.page-clicked {
+    text-decoration: underline;
+}
+
+.page:hover {
+    text-decoration: underline;
+}

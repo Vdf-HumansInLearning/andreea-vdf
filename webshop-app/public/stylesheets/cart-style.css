@@ -5,3 +5,24 @@
 .item-container:not(:last-child) {
     border-bottom: 1px solid black;
 }
+
+.quantity {
+    font-weight: 500;
+}
+
+.quantity-btn {
+    border:none;
+    cursor: pointer;
+    background-color: white;
+}
+
+.fa-plus-square, .fa-minus-square {
+    font-size: 1.5em;
+}
+
+.delete-item {
+    border:2px solid black;
+    background-color: white;
+    cursor: pointer;
+    text-align: center;
+}

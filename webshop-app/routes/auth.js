@@ -1,5 +1,5 @@
 var express = require('express');
-const fs = require('fs');
+const axios = require('axios').default;
 var router = express.Router();
 
 router.get('/login', function(req, res, next) {
@@ -15,19 +15,32 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-  let email = req.body.email;
-  let password = req.body.password;
-  console.log(typeof email, typeof password);
-  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
-  let user = users.find(user => user.email === email && user.password === password);
-  console.log(user);
-  if(user){
-    res.cookie('user_id', user.id).cookie('user_role', user.role).send('cookie set');
-  } else {
-    res.clearCookie('user_id');
-    res.clearCookie('user_role');
-    res.send('cookie user cleared');
-  }
+
+  axios.post(`http://localhost:3001/user/login`, {
+    email : req.body.email,
+    password : req.body.password
+  },{
+    "headers": {
+      "content-type": "application/json",
+    }})
+    .then(function (response) {
+      // handle success
+      const user = response.data;
+
+      if(user){
+        res.cookie('user_id', user.id).cookie('user_role', user.role).send('cookie set');
+      } else {
+        res.clearCookie('user_id');
+        res.clearCookie('user_role');
+        res.send('cookie user cleared');
+      }
+
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    });
+  
 });
 
 router.get('/register', function(req, res, next) {
@@ -46,44 +59,25 @@ router.post('/register', function(req, res, next) {
     
     console.log(req.body);
     
-  
-    let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
-    users.push({
-      "id": users[users.length-1].id + 1,
-      "name": req.body.first_name + " " + req.body.last_name,
-      "username": req.body.username,
-      "email": req.body.email,
-      "password": req.body.password,
-      "role": "user",
-      "loggedin": false,
-      "address": {
-        "street": "",
-        "suite": "",
-        "city": "",
-        "zipcode": "",
-        "geo": {
-          "lat": "",
-          "lng": ""
-        }
-      },
-      "phone": "",
-      "website": "",
-      "company": {
-        "name": "",
-        "catchPhrase": "",
-        "bs": ""
-      }
-    });
-    console.log(users);
-    fs.writeFile('./users.json', JSON.stringify(users), function (err) { 
-      if (err){
-        console.log(err);
-      } else{
-        console.log('Write operation complete.');
-      }
+    axios.post(`http://localhost:3001/user/register`, {
+      name: req.body.first_name + " " + req.body.last_name,
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password
+    },{
+    "headers": {
+      "content-type": "application/json",
+    }})
+    .then(function (response) {
+      // handle success
+      res.send("Successfully registered");
     })
-  
-    res.send("Successfully registered");
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+      res.send(error);
+    });
+    
 });
 
 router.get('/logout', function(req, res, next) {

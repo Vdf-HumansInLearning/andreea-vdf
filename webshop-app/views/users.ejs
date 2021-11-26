@@ -15,9 +15,11 @@
                         <button class="btn-collapse btn btn-outline-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= users[i].id %>" aria-expanded="false" aria-controls="collapseExample">
                             <i class="fas fa-chevron-circle-down"></i>
                         </button>
+                        <% if(users[i].role === "user"){ %>
                         <button class="btn-delete btn btn-outline-danger" type="button" id="<%= users[i].id %>">
                             <i class="fas fa-trash-alt"></i>
                         </button>
+                        <% } %>
                     </li>
                     <div class="collapse" id="collapse<%= users[i].id %>">
                         <div class="card card-body">

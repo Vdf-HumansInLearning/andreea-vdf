@@ -33,7 +33,7 @@ let deleteBtn = document.querySelectorAll(".btn-delete");
 if(deleteBtn){
     deleteBtn.forEach(item => {
         item.addEventListener('click', () => {
-            fetch(`/users/delete/${item.id}`, {
+            fetch(`/user/${item.id}`, {
             method: 'DELETE',
             }).then(data => {
                 window.location.reload();
