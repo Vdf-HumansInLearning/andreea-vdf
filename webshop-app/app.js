@@ -1,52 +1,36 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var detailsRouter = require('./routes/details');
-var phonesRouter = require('./routes/phones');
-var profileRouter = require('./routes/profile');
-var cartRouter = require('./routes/cart');
-var authRouter = require('./routes/auth');
+const app = express();
 
-var app = express();
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '/public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/phone', detailsRouter);
-app.use('/phones', phonesRouter);
-app.use('/user/delete/:id', usersRouter);
-app.use('/profile', profileRouter);
-app.use('/cart', cartRouter);
-app.use('/auth', authRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.get('/courses', (req, res) => {
+    res.status(200).json({ name: 'api testing' });
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.get('/course', (req, res) => {
+    let name = req.query.name;
+    res.json({ id: '1', name: name });
+});
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+app.get('/course/:id', (req, res) => {
+    let id = req.params.id;
+    let name;
+    if(id === '1') {
+        name = 'mocha';
+    };
+    res.json({ id: id, name: name });
+});
+
+app.post('/course', (req, res) => {
+    let name = req.body.name;
+    res.json({ id: '2', name: name });
+});
+
+app.post('/course', (req, res) => {
+    let name = req.body.name;
+    res.json({ id: '2', name: name });
 });
 
 module.exports = app;
