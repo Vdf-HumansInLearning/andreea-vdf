@@ -19,7 +19,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-      - run: cd webshop-app
-      - run: npm ci
-      - run: npm install
-      - run: npm test
+      - name: Install Composer Dependencies
+        working-directory: ./webshop-app
+        run: npm ci
+      - name: Running unit tests
+        working-directory: ./webshop-app
+        run: npm test
