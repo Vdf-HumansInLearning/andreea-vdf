@@ -207,4 +207,4 @@ function getSorted(sort) {
 }
 
 
-module.exports = router;
+module.exports = {router,getProductsByBrand};
