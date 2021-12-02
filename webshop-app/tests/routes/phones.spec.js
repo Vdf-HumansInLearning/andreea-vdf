@@ -5,8 +5,8 @@ const should = chai.should();  // Using Should style
 
 const phones = require('../../routes/phones');
 
-describe("ksand", function() {
-    it("sajhd", function(){
+describe("Phones.js unit tests", function() {
+    it("correctly gets the phones by brand", function(){
         var item = {
             "name":"Galaxy A12",
             "brand":"Samsung",
