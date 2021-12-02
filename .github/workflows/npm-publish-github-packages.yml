@@ -19,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-      - name: Install Composer Dependencies
+      - name: Install Dependencies
         working-directory: ./webshop-app
         run: npm ci
       - name: Running unit tests
