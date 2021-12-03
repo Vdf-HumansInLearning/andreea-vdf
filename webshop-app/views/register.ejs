@@ -40,6 +40,19 @@
             <button type="submit" class="btn btn-outline-danger w-100">Register</button>
             <div id="registerHelp" class="form-text text-center">Already have an account? <a href="/auth/login" class="register-link text-danger">Login</a></div>
         </form>
+        <div class="modal" id="register-success" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Successfully registered! Please log in!</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
         <% } else{ %>  
             <h3 class="main-title">You are already registered.</h3>
             <a href="/">Go back to Home page</a>

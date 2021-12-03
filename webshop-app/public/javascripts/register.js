@@ -23,8 +23,9 @@ if(form) {
             .then(data => {
                 console.log(data);
                 if(data.status === 200){
-                    localStorage.setItem("register_status", 200);
-                    window.location.href = "http://localhost:3000/auth/login";
+                    var myModal = new bootstrap.Modal(document.getElementById("register-success"), {});
+                    myModal.show();
+                    
                 }
                 
             })
@@ -32,6 +33,11 @@ if(form) {
         } else {
             document.getElementById("invalid-name").style.display = "block";
         }
+    });
+
+    var myModalEl = document.getElementById('register-success')
+    myModalEl.addEventListener('hide.bs.modal', function (event) {
+        window.location.href = "http://localhost:3000/auth/login";
     });
     
     // Get the input box

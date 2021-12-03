@@ -21,6 +21,19 @@
             <button type="submit" class="btn btn-outline-danger w-100 mt-3">Login</button>
             <div id="registerHelp" class="form-text text-center">You don't have an account? <a href="/auth/register" class="register-link text-danger">Register</a></div>
         </form>
+        <div class="modal" id="confirm-login" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Successfully logged in!</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+        </div>
         <% } else{ %>  
             <h3 class="main-title">You are already logged in.</h3>
             <a href="/">Go back to Home page</a>

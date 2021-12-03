@@ -194,10 +194,12 @@ if(localStorageItems && localStorageObject.length > 0){
     });
 
     const deleteBtns = document.querySelectorAll(".delete-item");
+    var modal = new bootstrap.Modal(document.getElementById("confirm-delete"), {});
     console.log(deleteBtns);
     deleteBtns.forEach(item => {
         item.addEventListener("click", () => {
             document.getElementById("delete-user").addEventListener('click', function(e) {
+                modal.hide();
                 let total = 0;
                 for(let i=0;i<localStorageObject.length;i++){
                     if(localStorageObject[i].name === item.parentElement.parentElement.firstChild.textContent.slice(2)){
@@ -223,9 +225,14 @@ if(localStorageItems && localStorageObject.length > 0){
 
     orderBtn.addEventListener("click", () => {
         localStorage.removeItem("items");
-        alert("You ordered!");
-        window.location.reload();
+        var myModal = new bootstrap.Modal(document.getElementById("order-success"), {});
+        myModal.show();
+       
     });
+    var myModalEl = document.getElementById('order-success')
+    myModalEl.addEventListener('hide.bs.modal', function (event) {
+        window.location.reload();
+    })
 } else {
     localStorage.removeItem("items");
     let emptyCart = document.createElement("h4");

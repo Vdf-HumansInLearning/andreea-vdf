@@ -1,10 +1,6 @@
 
 if(document.getElementById("login-form")){
-    let localStorageStatus = localStorage.getItem('register_status');
-    if(localStorageStatus === '200'){
-        alert("Successfully registered! Please log in!");
-    }
-    localStorage.removeItem('register_status');
+    
     document.getElementById("login-form").addEventListener("submit",function(e) {
         e.preventDefault();
         let username = document.getElementById("username").value;
@@ -26,8 +22,9 @@ if(document.getElementById("login-form")){
                 document.getElementById("invalid").classList.remove("d-none");
             } else {
                 if(data.status === 200){
-                    localStorage.setItem("login_status", 200);
-                    window.location.href = "http://localhost:3000/";
+                    var myModal = new bootstrap.Modal(document.getElementById("confirm-login"), {});
+                    myModal.show();
+                    
                 }
                 
             }
@@ -35,5 +32,9 @@ if(document.getElementById("login-form")){
         })
         
     
+    });
+    var myModalEl = document.getElementById('confirm-login')
+    myModalEl.addEventListener('hide.bs.modal', function (event) {
+        window.location.href = "http://localhost:3000/";
     });
 }

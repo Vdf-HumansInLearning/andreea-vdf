@@ -120,14 +120,15 @@
                             <h4 class="subtitle"><%= products[i].name %></h4>
                             <p>from</p>
                             <% if(products[i].discount > 0){ %>
-                                <h5>Price : <span class="discounted"><%= products[i].price %></span> <%= products[i].price - products[i].discount %> RON</h5>
+                                <h5>Price : <span class="discounted"><%= products[i].price %></span> <span class="price"><%= products[i].price - products[i].discount %></span> RON</h5>
                             <% } else{ %>  
-                                <h5>Price : <%= products[i].price %> RON</h5>
+                                <h5>Price : <span class="price"><%= products[i].price %></span> RON</h5>
                             <% } %>
                             
                             <a href="/phone/<%= products[i].name %>" class="phone-link mb-2">
                                 <button class="btn btn-danger">See product details  &gt;</button>
                             </a>
+                            <button class="add-to-cart text-center btn btn-danger mt-2">Add to cart</button>
                         </div>
                     </div>
                 <% } %>
