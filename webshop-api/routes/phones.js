@@ -11,9 +11,17 @@ router.get('/', function(req, res, next) {
   res.json(phones);
 });
 
+router.get('/:id', function(req, res, next) {
+  
+  let content = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
+  let phone = content.find(item => item["id"] == req.params.id);
+  res.json(phone);
+});
+
 router.post("/", function(req, res, next) {
   let content = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
   content.push({
+    "id": content[content.length-1].id + 1,
     "name": req.body.name,
     "brand": req.body.brand,
     "operating_system": req.body.operating_system,

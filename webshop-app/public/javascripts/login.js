@@ -16,8 +16,6 @@ if(document.getElementById("login-form")){
             body: JSON.stringify({ email: username, password : password})
         })
         .then(data => {
-            console.log(document.cookie);
-            console.log(data);
             if(document.cookie === ""){
                 document.getElementById("invalid").classList.remove("d-none");
             } else {

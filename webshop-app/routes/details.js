@@ -12,22 +12,25 @@ router.get('/:phone', function(req, res, next) {
     logged_in = true;
   }
 
-  let phone;
-  axios.get(`http://localhost:3001/phone/${req.params.phone}`)
+
+  let average, phone, id, content;
+  axios.get(`http://localhost:3001/phones`)
   .then(function (response) {
     // handle success
-    phone = response.data;
-    return axios.get(`http://localhost:3001/phones`);
+    content = response.data;
+    id = content.find(item => item["name"] === req.params.phone).id;
+    return axios.get(`http://localhost:3001/phones/${id}`);
   }).then(function (response) {
     // handle success
-    let content = response.data;
-    var average = parseFloat(content.filter(product => product.brand === phone.brand && product.rating > 0).reduce((previous,current,index,array) => {
+    phone = response.data;
+    average = parseFloat(content.filter(product => product.brand === phone.brand && product.rating > 0).reduce((previous,current,index,array) => {
       let calcSum = previous + current.rating;
       if(index === array.length - 1 ) {
           return calcSum/array.length;
       }
       return calcSum;
     },0).toFixed(1));
+    
     res.render('details', { 
       title: 'Details',
       css: 'stylesheets/details-style.css',

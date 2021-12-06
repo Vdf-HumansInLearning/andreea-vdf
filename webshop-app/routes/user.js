@@ -5,7 +5,7 @@ var router = express.Router();
 
 router.delete('/:id', function(req, res) {
     res.send(`Deleting user ${req.params.id}`);
-    axios.delete(`http://localhost:3001/user/${req.params.id}`, { data: req.params.id }).then(
+    axios.delete(`http://localhost:3001/users/${req.params.id}`, { data: req.params.id }).then(
     )
   
 });

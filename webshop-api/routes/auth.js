@@ -2,13 +2,19 @@ var express = require('express');
 const fs = require('fs');
 var router = express.Router();
 
+router.post('/login', function(req, res, next) {
+  console.log(req.body);
+  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+  let user = users.find(user => user.email === req.body.email && user.password === req.body.password);
+  console.log(user);
+  res.json(user);
+});
+
 router.post('/register', function(req, res, next) {
-    
-    console.log(req.body);
-    let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
-    users.push({
+  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+  users.push({
       "id": users[users.length-1].id + 1,
-      "name": req.body.first_name + " " + req.body.last_name,
+      "name": req.body.name,
       "username": req.body.username,
       "email": req.body.email,
       "password": req.body.password,
@@ -32,16 +38,17 @@ router.post('/register', function(req, res, next) {
         "bs": ""
       }
     });
-    console.log(users);
-    fs.writeFile('./users.json', JSON.stringify(users), function (err) { 
+  fs.writeFile('./users.json', JSON.stringify(users), function (err) { 
       if (err){
         console.log(err);
+        res.send(err);
       } else{
         console.log('Write operation complete.');
+        res.send("Successfully registered");
       }
-    })
+  })
   
-    res.send("Successfully registered");
+  
 });
 
 

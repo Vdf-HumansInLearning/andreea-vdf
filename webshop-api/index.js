@@ -6,8 +6,6 @@ var path = require('path');
 const port = 3001
 
 var usersRouter = require('./routes/users');
-var userRouter = require('./routes/user');
-var phoneRouter = require('./routes/phone');
 var phonesRouter = require('./routes/phones');
 var cartRouter = require('./routes/cart');
 var authRouter = require('./routes/auth');
@@ -25,8 +23,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.use('/users', usersRouter);
-app.use('/user', userRouter);
-app.use('/phone', phoneRouter);
 app.use('/phones', phonesRouter);
 app.use('/cart', cartRouter);
 app.use('/auth', authRouter);

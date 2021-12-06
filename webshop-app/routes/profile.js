@@ -12,7 +12,7 @@ router.get('/', function(req, res, next) {
   if(req.cookies.user_role && req.cookies.user_id){
     logged_in = true;
     
-    axios.get(`http://localhost:3001/user/${req.cookies.user_id}`)
+    axios.get(`http://localhost:3001/users/${req.cookies.user_id}`)
     .then(function (response) {
       // handle success
       const user = response.data;
