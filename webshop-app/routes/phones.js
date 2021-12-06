@@ -90,17 +90,17 @@ router.get('/', function(req, res, next) {
 });
 
 router.post("/", function(req, res, next) {
-  res.send(`Adding phone ${req.query.name}`);
+  res.send(`Adding phone ${req.body.name}`);
   axios.post('http://localhost:3001/phones', {
-    name: req.query.name,
-    brand: req.query.brand,
-    operating_system : req.query.os,
-    price : Number(req.query.price),
-    discount : Number(req.query.discount),
-    quantity : Number(req.query.quantity),
-    availability_date :req.query.date,
-    rating : Number(req.query.rating),
-    image : req.query.imgUrl
+    name: req.body.name,
+    brand: req.body.brand,
+    operating_system : req.body.os,
+    price : Number(req.body.price),
+    discount : Number(req.body.discount),
+    quantity : Number(req.body.quantity),
+    availability_date :req.body.date,
+    rating : Number(req.body.rating),
+    image : req.body.imgUrl
   },{
   "headers": {
     "content-type": "application/json",

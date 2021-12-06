@@ -107,6 +107,7 @@ document.getElementById("phones-link").classList = "nav-link active";
     });
 
     if(document.getElementById("display-add-form")){
+        var myModal = new bootstrap.Modal(document.getElementById("phone-added"), {});
         document.getElementById("display-add-form").addEventListener("click", function() {
             document.getElementById("new-phone-container").classList.remove("hide");
         });
@@ -192,13 +193,25 @@ document.getElementById("phones-link").classList = "nav-link active";
             }
             document.getElementById("new-phone-container").classList.add("hide");
     
-            fetch(document.getElementById("new-phone-form").action + `?brand=${brand}&name=${name}&os=${os}&price=${price}&discount=${discount}&quantity=${quantity}&date=${date}&rating=${rating}&imgUrl=${img_path}`,{
-                method: 'post'
+            fetch(document.getElementById("new-phone-form").action,{
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ brand : brand, name : name, os : os, price : price, discount : discount,quantity : quantity,date : date,rating : rating,imgUrl : img_path})
             })
             .then(data => {
                 console.log(data);
+                if(data.status === 200){
+                    
+                    myModal.show();
+                    
+                }
             })
-            window.location.reload();
+            document.getElementById('phone-added').addEventListener('hide.bs.modal', function (event) {
+                window.location.reload();
+            });
+            
     
         });
     }
