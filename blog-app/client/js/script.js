@@ -1,5 +1,3 @@
-let articles;
-
 window.onload = function(e) {
     if(window.location.hash === ""){
         window.location.hash = "home";
@@ -26,96 +24,242 @@ function onRouteChange(e) {
 
 // call getArticles to load the content
 function loadContent(uri){
-    getArticles(uri);  
+    displayHtml(uri);  
 }
 
 //FUNCTIONS
+// display HTML based on the path (home or article)
+function displayHtml(path) {
+
+    // before anything, remove everything from the body element
+    let body = document.getElementsByTagName("body")[0];
+    if(body){
+        body.querySelectorAll('*').forEach(n => n.remove());
+    }
+    
+    getArticles(path,body);
+    
+}
+
 // get articles from db.json
-function getArticles(uri) {
+function getArticles(path,body){
+    // in case the path contains article, we will display the Article page
+    if(path.startsWith("article")) {
+        const articleId = path.slice(11);
+        //let article = articles.filter(item => item.id === Number(articleId));
 
-    fetch('http://localhost:3000/articles')
-    .then(
-        function(response) {
-        if (response.status !== 200) {
-            console.log('Looks like there was a problem. Status Code: ' +
-            response.status);
-            return;
+        let containerDiv = document.createElement("div");
+        containerDiv.setAttribute("class","container");
+
+        let themeButton = document.createElement("button");
+        themeButton.setAttribute("class","theme-btn");
+        themeButton.setAttribute("id","theme-btn");
+        let icon = document.createElement("i");
+
+        let localStorageTheme = localStorage.getItem('theme');
+        if(localStorageTheme === 'dark'){
+            icon.setAttribute("class","far fa-sun");
+            icon.setAttribute("id","light-icon");
+        } else {
+            icon.setAttribute("class","far fa-moon");
+            icon.setAttribute("id","dark-icon");
         }
+            
+        themeButton.appendChild(icon);
+        containerDiv.appendChild(themeButton);
+        containerDiv.appendChild(createNav());
 
-        // Examine the text in the response
-        response.json().then(function(data) {
-            articles = data;
-            // call the displayHtml function to create the elements for the page based on the uri
-            displayHtml(uri);
-            if(uri === "home") {
+        let main = document.createElement("main");
+        main.setAttribute("class","main");
+
+        fetch(`http://localhost:3000/articles/${articleId}`)
+        .then(
+            function(response) {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                response.status);
+                return;
+            }
+
+            // Examine the text in the response
+            response.json().then(function(data) {
+
+                main.appendChild(createArticleDetails(data));
+                
+            });
+        }
+        )
+        .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+        });
+        
+
+        containerDiv.appendChild(main);
+        fetch(`http://localhost:3000/articles`)
+        .then(
+            function(response) {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                response.status);
+                return;
+            }
+
+            // Examine the text in the response
+            response.json().then(function(data) {
+
+                containerDiv.appendChild(createFooterDetails(data));
+                
+            });
+        }
+        )
+        .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+        });
+        
+        body.appendChild(containerDiv);
+
+        document.getElementById("theme-btn").addEventListener("click", function() {
+                    
+            if(document.getElementById("theme-btn").childNodes[0].id === "dark-icon"){
+                document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
+                let lightIcon = document.createElement("i");
+                lightIcon.setAttribute("class","far fa-sun");
+                lightIcon.setAttribute("id","light-icon");
+                document.getElementById("theme-btn").appendChild(lightIcon);
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem("theme", "dark");
+            } else {
+                document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
+                let darkIcon = document.createElement("i");
+                darkIcon.setAttribute("class","far fa-moon");
+                darkIcon.setAttribute("id","dark-icon");
+                document.getElementById("theme-btn").appendChild(darkIcon);
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem("theme", "light");
+            }
+            
+        });
+
+    // in case the path is home, we will display the Home page
+    } else if (path === "home") {
+        let containerDiv = document.createElement("div");
+        containerDiv.setAttribute("class","container");
+
+        let themeButton = document.createElement("button");
+        themeButton.setAttribute("class","theme-btn");
+        themeButton.setAttribute("id","theme-btn");
+        let icon = document.createElement("i");
+
+        let localStorageTheme = localStorage.getItem('theme');
+        if(localStorageTheme === 'dark'){
+            icon.setAttribute("class","far fa-sun");
+            icon.setAttribute("id","light-icon");
+        } else {
+            icon.setAttribute("class","far fa-moon");
+            icon.setAttribute("id","dark-icon");
+        }
+            
+        themeButton.appendChild(icon);
+        containerDiv.appendChild(themeButton);
+        containerDiv.appendChild(createNav());
+        containerDiv.appendChild(createAddArticleContainer());
+
+        let main = document.createElement("main");
+        main.setAttribute("class","main");
+        
+        fetch('http://localhost:3000/articles')
+        .then(
+            function(response) {
+            if (response.status !== 200) {
+                console.log('Looks like there was a problem. Status Code: ' +
+                response.status);
+                return;
+            }
+
+            // Examine the text in the response
+            response.json().then(function(data) {
+
+                for(let i=0; i< data.length;i++){
+                    main.appendChild(createArticleHome(data[i]));
+                }
+
+                //
+                containerDiv.appendChild(main);
+                console.log(main);
+                containerDiv.appendChild(createFooterHome());
+                containerDiv.appendChild(createModal());
+                body.appendChild(containerDiv);
+                console.log(body);
 
                 // CONSTANTS
-                const ADDBTN = document.getElementById("add-article");
-                const CANCELBTN = document.getElementById("cancel");
-                const SAVEBTN = document.getElementById("save");
+                const addBtn = document.getElementById("add-article");
+                const cancelBtn = document.getElementById("cancel");
+                const saveBtn = document.getElementById("save");
                 const MODAL = document.querySelector(".modal__overlay");
-                const DELETEBUTTONS = document.querySelectorAll(".btn-delete");
-                const EDITBUTTONS = document.querySelectorAll(".btn-edit");
-
+                const deleteButtons = document.querySelectorAll(".btn-delete");
+                const editButtons = document.querySelectorAll(".btn-edit");
+                console.log(editButtons);
                 // EVENT LISTENERS
-                ADDBTN.addEventListener('click', () => {
+                addBtn.addEventListener('click', () => {
                     MODAL.style.display = "block";
-                    
-
-                    CANCELBTN.addEventListener('click', () => {
+                    cancelBtn.addEventListener('click', () => {
                         MODAL.style.display = "none";
                     });
-    
-                    SAVEBTN.addEventListener('click', () => {
+
+                    saveBtn.addEventListener('click', () => {
                         addArticle();
                     });
                 });
 
                 
                 // the delete and edit buttons for each article
-                DELETEBUTTONS.forEach( item => {
+                deleteButtons.forEach( item => {
                     item.addEventListener('click', () => {
                         id = item.parentElement.id;
                         deleteArticle(id);
                     });
                 });
 
-                EDITBUTTONS.forEach( item => {
+                editButtons.forEach( item => {
                     item.addEventListener('click', () => {
                         id = item.parentElement.id;
-                        editArticle(id);
+                        let article = data.find(item => item.id == id);
+                        editArticle(id,article);
                     });
                 });
-            }
 
-            document.getElementById("theme-btn").addEventListener("click", function() {
-                
-                if(document.getElementById("theme-btn").childNodes[0].id === "dark-icon"){
-                    document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
-                    let lightIcon = document.createElement("i");
-                    lightIcon.setAttribute("class","far fa-sun");
-                    lightIcon.setAttribute("id","light-icon");
-                    document.getElementById("theme-btn").appendChild(lightIcon);
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    localStorage.setItem("theme", "dark");
-                } else {
-                    document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
-                    let darkIcon = document.createElement("i");
-                    darkIcon.setAttribute("class","far fa-moon");
-                    darkIcon.setAttribute("id","dark-icon");
-                    document.getElementById("theme-btn").appendChild(darkIcon);
-                    document.documentElement.setAttribute('data-theme', 'light');
-                    localStorage.setItem("theme", "light");
-                }
+                document.getElementById("theme-btn").addEventListener("click", function() {
+                        
+                    if(document.getElementById("theme-btn").childNodes[0].id === "dark-icon"){
+                        document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
+                        let lightIcon = document.createElement("i");
+                        lightIcon.setAttribute("class","far fa-sun");
+                        lightIcon.setAttribute("id","light-icon");
+                        document.getElementById("theme-btn").appendChild(lightIcon);
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        localStorage.setItem("theme", "dark");
+                    } else {
+                        document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
+                        let darkIcon = document.createElement("i");
+                        darkIcon.setAttribute("class","far fa-moon");
+                        darkIcon.setAttribute("id","dark-icon");
+                        document.getElementById("theme-btn").appendChild(darkIcon);
+                        document.documentElement.setAttribute('data-theme', 'light');
+                        localStorage.setItem("theme", "light");
+                    }
+                    
+                });
                 
             });
-            
-        });
         }
-    )
-    .catch(function(err) {
-        console.log('Fetch Error :-S', err);
-    });
+        )
+        .catch(function(err) {
+            console.log('Fetch Error :-S', err);
+        });
+        
+    } else {
+        body.innerHTML = "404 Not Found"
+    }
 }
 
 // store the form inputs values and make a call to the server to add the new article
@@ -158,8 +302,8 @@ function addArticle() {
 }
 
 // give the form inputs the values of the article to edit; make a call to the server to update the article
-function editArticle(id) {
-    
+function editArticle(id,article) {
+    console.log(id);
     const MODAL = document.querySelector(".modal__overlay");
     const CANCELBTN = document.getElementById("cancel");
     const SAVEBTN = document.getElementById("save");
@@ -170,7 +314,7 @@ function editArticle(id) {
     const dateInput = document.getElementById("date");
     const sayingInput = document.getElementById("saying");
     const contentInput = document.getElementById("article-content");
-    let article = articles.find(item => item.id == id);
+    // let article = articles.find(item => item.id == id);
     titleInput.value = article.title;
     tagInput.value = article.info.subtitle;
     authorInput.value = article.info.author;
@@ -243,87 +387,6 @@ function cleanupAndLoad() {
     loadContent(window.location.hash.substring(1));
 }
 
-// display HTML based on the path (home or article)
-function displayHtml(path) {
-    // before anything, remove everything from the body element
-    let body = document.getElementsByTagName("body")[0];
-    if(body){
-        body.querySelectorAll('*').forEach(n => n.remove());
-    }
-    
-    // in case the path contains article, we will display the Article page
-    if(path.startsWith("article")) {
-        const articleId = path.slice(11);
-        let article = articles.filter(item => item.id === Number(articleId));
-
-        let containerDiv = document.createElement("div");
-        containerDiv.setAttribute("class","container");
-
-        let themeButton = document.createElement("button");
-        themeButton.setAttribute("class","theme-btn");
-        themeButton.setAttribute("id","theme-btn");
-        let icon = document.createElement("i");
-
-        let localStorageTheme = localStorage.getItem('theme');
-        if(localStorageTheme === 'dark'){
-            icon.setAttribute("class","far fa-sun");
-            icon.setAttribute("id","light-icon");
-        } else {
-            icon.setAttribute("class","far fa-moon");
-            icon.setAttribute("id","dark-icon");
-        }
-            
-        themeButton.appendChild(icon);
-        containerDiv.appendChild(themeButton);
-        containerDiv.appendChild(createNav());
-
-        let main = document.createElement("main");
-        main.setAttribute("class","main");
-        main.appendChild(createArticleDetails(article[0]));
-
-        containerDiv.appendChild(main);
-        containerDiv.appendChild(createFooterDetails());
-        body.appendChild(containerDiv);
-
-    // in case the path is home, we will display the Home page
-    } else if (path === "home") {
-        let containerDiv = document.createElement("div");
-        containerDiv.setAttribute("class","container");
-
-        let themeButton = document.createElement("button");
-        themeButton.setAttribute("class","theme-btn");
-        themeButton.setAttribute("id","theme-btn");
-        let icon = document.createElement("i");
-
-        let localStorageTheme = localStorage.getItem('theme');
-        if(localStorageTheme === 'dark'){
-            icon.setAttribute("class","far fa-sun");
-            icon.setAttribute("id","light-icon");
-        } else {
-            icon.setAttribute("class","far fa-moon");
-            icon.setAttribute("id","dark-icon");
-        }
-            
-        themeButton.appendChild(icon);
-        containerDiv.appendChild(themeButton);
-        containerDiv.appendChild(createNav());
-        containerDiv.appendChild(createAddArticleContainer());
-
-        let main = document.createElement("main");
-        main.setAttribute("class","main");
-        for(let i=0; i< articles.length;i++){
-            main.appendChild(createArticleHome(articles[i]));
-        }
-        containerDiv.appendChild(main);
-        containerDiv.appendChild(createFooterHome());
-        containerDiv.appendChild(createModal());
-        body.appendChild(containerDiv);
-    } else {
-        body.innerHTML = "404 Not Found"
-    }
-    
-    
-}
 
 // create the navigation menu
 function createNav(){
@@ -497,7 +560,7 @@ function createFooterHome() {
 }
 
 // create the footer for the details page
-function createFooterDetails() {
+function createFooterDetails(articles) {
     const url = window.location.hash.substring(1);
     const id = Number(url.slice(11));
 
