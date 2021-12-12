@@ -6,10 +6,16 @@
     <div class="container d-flex justify-content-center flex-column align-items-center mt-5 pt-5" id="container">
         <% if(registered === false){ %>
         <h1 class="main-title">Register a new account</h1>
+        <div class="invalid bg-danger mt-3 d-none" id="invalid">
+            <p class="text-white p-2 m-0">The username or email are already used. Please try again!</p>
+        </div>
         <form class="register-form mb-3" id="register-form" action="/auth/register" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
                 <input type="text" name="username" placeholder="Username" class="form-control" id="username" aria-describedby="usernameHelp" required>
+            </div>
+            <div class="invalid-feedback mb-2" id="invalid-username">
+                Invalid username.
             </div>
             <label for="name" class="form-label">Full name</label>
             <div class="mb-3 input-group">
@@ -22,6 +28,9 @@
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input type="email" name="email" placeholder="Email address" class="form-control" id="email" aria-describedby="emailHelp" required>
+            </div>
+            <div class="invalid-feedback mb-2" id="invalid-email">
+                Invalid email format.
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>

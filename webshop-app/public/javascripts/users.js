@@ -35,7 +35,7 @@ if(deleteBtn){
 
         item.addEventListener('click', () => {
             document.getElementById("delete-user").addEventListener('click', function(e) {
-                fetch(`/user/${item.id}`, {
+                fetch(`/users/${item.id}`, {
                     method: 'DELETE',
                     }).then(data => {
                         window.location.reload();

@@ -118,6 +118,9 @@ document.getElementById("phones-link").classList = "nav-link active";
     
         document.querySelectorAll("#new-phone-form .input-group .form-control").forEach(item => {
             item.addEventListener("blur", function() {
+                let regexProductName = /(^[A-Za-z0-9]{1,16})([ ]{0,1})([A-Za-z0-9]{1,16})?([ ]{0,1})?([A-Za-z0-9]{1,16})/
+                let regexLetters = /^[a-zA-Z]+$/;
+
                 let brand = document.getElementById("add-brand").value;
                 let name = document.getElementById("add-name").value;
                 let os = document.getElementById("add-os").value;
@@ -139,8 +142,68 @@ document.getElementById("phones-link").classList = "nav-link active";
                     rating = -1;
                 }
                 // console.log(brand, name, os, price, discount, quantity, date, rating);
-                if(brand && name && os && price && quantity && date) {
-                    document.getElementById("add-phone").disabled = false;
+                if(item.id === "add-brand") {
+                    if(brand.match(regexLetters) && brand.length >= 1 && brand.length <= 30) {
+                        document.getElementById("invalid-brand-add").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-brand-add").style.display = "block";
+                    }
+                }
+
+                if(item.id === "add-name") {
+                    if(name.match(regexProductName) && name.length >= 1 && name.length <= 30) {
+                        document.getElementById("invalid-name-add").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-name-add").style.display = "block";
+                    }
+                }
+
+                if(item.id === "add-os") {
+                    if(os.match(regexLetters) && os.length >= 1 && os.length <= 30) {
+                        document.getElementById("invalid-os-add").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-os-add").style.display = "block";
+                    }
+                }
+
+                if(item.id === "add-price") {
+                    if(price > 0) {
+                        document.getElementById("invalid-price-add").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-price-add").style.display = "block";
+                    }
+                }
+
+                if(item.id === "add-discount") {
+                    if(discount >= 0) {
+                        document.getElementById("invalid-discount-add").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-discount-add").style.display = "block";
+                    }
+                }
+
+                if(item.id === "add-quantity") {
+                    if(quantity > 0) {
+                        document.getElementById("invalid-quantity-add").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-quantity-add").style.display = "block";
+                    }
+                }
+
+                if(item.id === "add-rating") {
+                    if(rating >= -1 && rating <= 5) {
+                        document.getElementById("invalid-rating-add").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-rating-add").style.display = "block";
+                    }
+                }
+
+                if(item.id === "add-date") {
+                    if(date.length > 0) {
+                        document.getElementById("invalid-date-add").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-date-add").style.display = "block";
+                    }
                 }
             })
         })
@@ -191,42 +254,271 @@ document.getElementById("phones-link").classList = "nav-link active";
                     default :
                         img_path = "";
             }
-            document.getElementById("new-phone-container").classList.add("hide");
-    
-            fetch(document.getElementById("new-phone-form").action,{
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ brand : brand, name : name, os : os, price : price, discount : discount,quantity : quantity,date : date,rating : rating,imgUrl : img_path})
-            })
-            .then(data => {
-                console.log(data);
-                if(data.status === 200){
-                    
-                    myModal.show();
-                    
-                }
-            })
-            document.getElementById('phone-added').addEventListener('hide.bs.modal', function (event) {
-                window.location.reload();
-            });
+            
+            let newProduct = {
+                "name": name,
+                "brand": brand,
+                "operating_system": os,
+                "price": Number(price),
+                "discount": Number(discount),
+                "quantity": Number(quantity),
+                "availability_date":date,
+                "rating": Number(rating),
+                "image": img_path
+            };
+            if(validateProduct(newProduct)){
+                document.getElementById("new-phone-container").classList.add("hide");
+
+                fetch(document.getElementById("new-phone-form").action,{
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ brand : brand, name : name, os : os, price : price, discount : discount,quantity : quantity,date : date,rating : rating,imgUrl : img_path})
+                })
+                .then(data => {
+                    if(data.status === 200){
+                        setTimeout(() => {myModal.show()}, 2000);
+                    } else {
+                        document.getElementById("invalid-add").classList.remove("d-none");
+                    }
+                })
+                document.getElementById('phone-added').addEventListener('hide.bs.modal', function (event) {
+                    window.location.reload();
+                });
+            }
+            
             
     
         });
     }
+
+    let editBtn = document.querySelectorAll(".edit-btn")
+    if(editBtn.length > 0) {
+        let updateModal = new bootstrap.Modal(document.getElementById("phone-updated"), {});
+
+        document.getElementById("cancel-edit").addEventListener("click", function() {
+            document.getElementById("edit-phone-container").classList.add("hide");
+        });
     
+        document.querySelectorAll("#edit-phone-form .input-group .form-control").forEach(item => {
+            item.addEventListener("blur", function() {
+                let brand = document.getElementById("edit-brand").value;
+                let name = document.getElementById("edit-name").value;
+                let os = document.getElementById("edit-os").value;
+                let price = Number(document.getElementById("edit-price").value);
+                let discount = document.getElementById("edit-discount").value;
+                let quantity = Number(document.getElementById("edit-quantity").value);
+                let date = document.getElementById("edit-date").value;
+                let rating = document.getElementById("edit-rating").value;
+                let regexProductName = /(^[A-Za-z0-9]{1,16})([ ]{0,1})([A-Za-z0-9]{1,16})?([ ]{0,1})?([A-Za-z0-9]{1,16})/
+                let regexLetters = /^[a-zA-Z]+$/;
+
+                if(discount){
+                    discount = Number(discount);
+                } else
+                {
+                    discount = 0;
+                }
+                if(rating){
+                    rating = Number(rating);
+                } else
+                {
+                    rating = -1;
+                }
+
+                if(item.id === "edit-brand") {
+                    if(brand.match(regexLetters) && brand.length >= 1 && brand.length <= 30) {
+                        document.getElementById("invalid-brand-edit").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-brand-edit").style.display = "block";
+                    }
+                }
+
+                if(item.id === "edit-name") {
+                    if(name.match(regexProductName) && name.length >= 1 && name.length <= 30) {
+                        document.getElementById("invalid-name-edit").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-name-edit").style.display = "block";
+                    }
+                }
+
+                if(item.id === "edit-os") {
+                    if(os.match(regexLetters) && os.length >= 1 && os.length <= 30) {
+                        document.getElementById("invalid-os-edit").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-os-edit").style.display = "block";
+                    }
+                }
+
+                if(item.id === "edit-price") {
+                    if(price > 0) {
+                        document.getElementById("invalid-price-edit").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-price-edit").style.display = "block";
+                    }
+                }
+
+                if(item.id === "edit-discount") {
+                    if(discount >= 0) {
+                        document.getElementById("invalid-discount-edit").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-discount-edit").style.display = "block";
+                    }
+                }
+
+                if(item.id === "edit-quantity") {
+                    if(quantity > 0) {
+                        document.getElementById("invalid-quantity-edit").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-quantity-edit").style.display = "block";
+                    }
+                }
+
+                if(item.id === "edit-rating") {
+                    if(rating >= -1 && rating <= 5) {
+                        document.getElementById("invalid-rating-edit").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-rating-edit").style.display = "block";
+                    }
+                }
+
+                if(item.id === "edit-date") {
+                    if(date.length > 0) {
+                        document.getElementById("invalid-date-edit").style.display = "none";
+                    } else {
+                        document.getElementById("invalid-date-edit").style.display = "block";
+                    }
+                }
+            })
+        })
+    
+        document.getElementById("edit-phone-form").addEventListener("submit",function(e) {
+            e.preventDefault();
+            let brand = document.getElementById("edit-brand").value;
+            let name = document.getElementById("edit-name").value;
+            let os = document.getElementById("edit-os").value;
+            let price = Number(document.getElementById("edit-price").value);
+            let discount = document.getElementById("edit-discount").value;
+            let quantity = Number(document.getElementById("edit-quantity").value);
+            let date = document.getElementById("edit-date").value;
+            let rating = document.getElementById("edit-rating").value;
+            if(discount){
+                discount = Number(discount);
+            } else
+            {
+                discount = 0;
+            }
+            if(rating){
+                rating = Number(rating);
+            } else
+            {
+                rating = -1;
+            }
+    
+            let img_path = "";
+                switch(brand){
+                    case "Samsung" :
+                        img_path += "toppng.com-samsung-phone-833x870.png";
+                        break;
+                    case "Apple" :
+                        img_path += "toppng.com-iphone-550x620.png";
+                        break;
+                    case "Motorola" :
+                        img_path += "toppng.com-motorola-moto-x-gen-2-tempered-glass-by-cellhelmet-motorola-moto-x2-310x585.png";
+                        break;
+                    case "Google" :
+                        img_path += "toppng.com-google-pixel-1-white-600x600.png";
+                        break;
+                    case "Xiaomi" :
+                        img_path += "toppng.com-xiaomi-smartphone-710x710.png";
+                        break;
+                    case "Huawei" :
+                        img_path += "toppng.com-huawei-p8-1200x900.png";
+                        break;
+                    default :
+                        img_path = "";
+            }
+
+            let updatedProduct = {
+                "name": name,
+                "brand": brand,
+                "operating_system": os,
+                "price": Number(price),
+                "discount": Number(discount),
+                "quantity": Number(quantity),
+                "availability_date":date,
+                "rating": Number(rating),
+                "image": img_path
+            };
+            if(validateProduct(updatedProduct)){
+                document.getElementById("edit-phone-container").classList.add("hide");
+
+                fetch(document.getElementById("edit-phone-form").action,{
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ brand : brand, name : name, os : os, price : price, discount : discount,quantity : quantity,date : date,rating : rating,imgUrl : img_path})
+                })
+                .then(data => {
+                    if(data.status === 200){
+                        setTimeout(() => {updateModal.show()}, 2000);
+                    } else {
+                        document.getElementById("invalid-edit").classList.remove("d-none");
+                    }
+                })
+                document.getElementById('phone-updated').addEventListener('hide.bs.modal', function (event) {
+                    window.location.reload();
+                });
+            }
+            
+    
+        });
+
+        editBtn.forEach( item => {
+            item.addEventListener('click', () => {
+                console.log(item.parentElement.id);
+                fetch(`http://localhost:3001/phones/${item.parentElement.id}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("edit-phone-form").setAttribute("action",`/phones/${data.id}`);
+                    document.getElementById("edit-brand").value =  data.brand;
+                    document.getElementById("edit-name").value = data.name;
+                    document.getElementById("edit-os").value = data.operating_system;
+                    document.getElementById("edit-price").value = data.price;
+                    document.getElementById("edit-discount").value = data.discount;
+                    document.getElementById("edit-quantity").value = data.quantity;
+                    document.getElementById("edit-date").value = data.availability_date;
+                    document.getElementById("edit-rating").value = data.rating;
+                    document.getElementById("edit-phone-container").classList.remove("hide");
+                });
+                
+            })
+        })
+    }
+
+    let deleteBtn = document.querySelectorAll(".delete-btn")
+    if(deleteBtn.length > 0) {
+        deleteBtn.forEach( item => {
+            item.addEventListener('click', () => {
+                document.getElementById("delete-phone").addEventListener('click', function(e) {
+                    fetch(`/phones/${item.parentElement.id}`, {
+                        method: 'DELETE',
+                        }).then(data => {
+                            window.location.reload();
+                        });
+                });
+            })
+        })
+    }   
 
 const addCartBtn = document.querySelectorAll(".add-to-cart");
 
 addCartBtn.forEach(item => {
     item.addEventListener("click", () => {
-        // console.log(item.parentElement);
-
         let name = item.parentElement.querySelector(".title").textContent + " " + item.parentElement.querySelector(".subtitle").textContent;
         let price = item.parentElement.querySelector(".price").textContent;
-        // console.log(name);
-        // console.log(price);
         var existing = localStorage.getItem('items');
         if(existing){
             let count = 0;
@@ -237,8 +529,7 @@ addCartBtn.forEach(item => {
                 if(parsedObject[i].name === name){
                     parsedObject[i].quantity += 1;
                     count +=1;
-                    console.log(parsedObject[i]);
-                    
+                    console.log(parsedObject[i]);               
                 }
             }
             console.log(count);
@@ -246,21 +537,39 @@ addCartBtn.forEach(item => {
                 parsedObject.push({name: name, price : price, quantity : 1 });
                 document.getElementById("cart-items").textContent = Number(document.getElementById("cart-items").textContent) + 1;
             }
-            localStorage.setItem("items", JSON.stringify(parsedObject));
-            
+            localStorage.setItem("items", JSON.stringify(parsedObject)); 
         } else {
             const items =  [{name: name, price : price, quantity : 1 }];
             localStorage.setItem("items", JSON.stringify(items));
             document.getElementById("cart-items").textContent = Number(document.getElementById("cart-items").textContent) + 1;
         }
-        
-        
     });
 });
-
-    
-
 // FUNCTIONS
+
+    function validateProduct(product) {
+        let regexProductName = /(^[A-Za-z0-9]{1,16})([ ]{0,1})([A-Za-z0-9]{1,16})?([ ]{0,1})?([A-Za-z0-9]{1,16})/
+        let regexLetters = /^[a-zA-Z]+$/;
+        let isValid = false;
+        if (
+        product.name.match(regexProductName) &&
+        product.name.length >= 1 &&
+        product.name.length <= 30 &&
+        product.brand.match(regexLetters) &&
+        product.brand.length >= 1 &&
+        product.brand.length <= 30 &&
+        product.operating_system.match(regexLetters) &&
+        product.price > 0 &&
+        product.discount >= 0 &&
+        product.quantity >= 0 &&
+        product.rating >= -1 &&
+        product.rating <= 5 &&
+        product.availability_date.length > 0
+        )
+        isValid = true;
+        else isValid = false;
+        return isValid;
+    }
 
     // filter by available date (change availability_date to see effects)
     function getProductsByDate(item){

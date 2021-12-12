@@ -21,6 +21,23 @@ body {
     margin-left:10px;
 } */
 
+.action-buttons {
+    padding: 5px 15px;
+}
+
+.edit-btn {
+    border: none;
+    background-color: white;
+    color: blue;
+}
+
+.delete-btn {
+    border: none;
+    border-left: 1px solid black;
+    background-color: white;
+    color: red;
+}
+
 .phone-img {
     text-align: center;
     height: 350px;
@@ -110,6 +127,20 @@ legend {
 }
 
 .new-phone {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10000;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: white;
+    width: auto;
+    height: auto;
+    border:1px solid red;
+}
+
+.edit-phone {
     position: fixed;
     left: 0;
     top: 0;

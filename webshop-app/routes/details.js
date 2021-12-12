@@ -17,7 +17,7 @@ router.get('/:phone', function(req, res, next) {
   axios.get(`http://localhost:3001/phones`)
   .then(function (response) {
     // handle success
-    content = response.data;
+    content = response.data.products;
     id = content.find(item => item["name"] === req.params.phone).id;
     return axios.get(`http://localhost:3001/phones/${id}`);
   }).then(function (response) {
@@ -43,7 +43,7 @@ router.get('/:phone', function(req, res, next) {
   })
   .catch(function (error) {
     // handle error
-    console.log(error);
+    res.status(404).send("404 Not Found");
   });
   
 });

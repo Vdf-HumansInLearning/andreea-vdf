@@ -29,7 +29,7 @@ router.get('/', function(req, res, next) {
     })
     .catch(function (error) {
       // handle error
-      console.log(error);
+      res.status(404).send("404 Not Found");
     });
   } else {
     res.render('index', { 

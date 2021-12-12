@@ -27,11 +27,16 @@ router.get('/', function(req, res, next) {
   })
   .catch(function (error) {
     // handle error
-    console.log(error);
+    res.status(400).send("404 Not Found");
   });
     
 });
 
+router.delete('/:id', function(req, res) {
+  res.send(`Deleting user ${req.params.id}`);
+  axios.delete(`http://localhost:3001/users/${req.params.id}`, { data: req.params.id }).then(
+  )
 
+});
 
 module.exports = router;

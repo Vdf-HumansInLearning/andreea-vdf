@@ -38,7 +38,9 @@ router.post('/login', function(req, res, next) {
     })
     .catch(function (error) {
       // handle error
-      console.log(error);
+      res.clearCookie('user_id');
+      res.clearCookie('user_role');
+      res.status(400).send({ message: "Bad request" });
     });
   
 });
@@ -56,7 +58,7 @@ router.get('/register', function(req, res, next) {
   });
   
 router.post('/register', function(req, res, next) {
-    
+    console.log(req.body);
     axios.post(`http://localhost:3001/auth/register`, {
       name: req.body.first_name + " " + req.body.last_name,
       username: req.body.username,
@@ -72,8 +74,7 @@ router.post('/register', function(req, res, next) {
     })
     .catch(function (error) {
       // handle error
-      console.log(error);
-      res.send(error);
+      res.status(400).send({ message: "Bad request" });
     });
     
 });
