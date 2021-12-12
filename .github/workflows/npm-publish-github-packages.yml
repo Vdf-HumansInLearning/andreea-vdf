@@ -20,8 +20,8 @@ jobs:
         with:
           node-version: 16
       - name: Install Dependencies
-        working-directory: ./webshop-app
+        working-directory: ./webshop-api
         run: npm ci
       - name: Running unit tests
-        working-directory: ./webshop-app
+        working-directory: ./webshop-api
         run: npm test
