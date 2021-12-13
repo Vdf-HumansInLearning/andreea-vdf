@@ -5,7 +5,7 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+  let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
   if(users){
     res.status(200).json(users);
   } else {
@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+  let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
   let user = users.find(user => user.id == req.params.id)
   if(user){
     res.status(200).json(user);
@@ -25,12 +25,12 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.delete('/:id', function(req, res) {
-  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+  let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
   let user = users.find(user => user.id == req.params.id)
   if(user){
     let updatedUsers = users.filter(user => user.id != req.params.id);
     try {
-      fs.writeFileSync('./users.json', JSON.stringify(updatedUsers));
+      fs.writeFileSync('./data/users.json', JSON.stringify(updatedUsers));
       res.status(200).send({ message: `Deleting user ${req.params.id}` });
     } catch (err) {
       throw err;
@@ -40,7 +40,7 @@ router.delete('/:id', function(req, res) {
 });
 
 router.put('/:id', function(req, res, next) {
-  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+  let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
   let usersIds = content.map(element => element.id);
   let index = usersIds.indexOf(Number(req.params.id));
   let user = users.find(user => user.id == req.params.id);
@@ -74,7 +74,7 @@ router.put('/:id', function(req, res, next) {
 
     if (validateUser(updatedUser)) {      
       users[index] = updatedUser;
-      fs.writeFile('./users.json', JSON.stringify(users), function (err) { 
+      fs.writeFile('./data/users.json', JSON.stringify(users), function (err) { 
         if (err) {
           throw err;
         } else {

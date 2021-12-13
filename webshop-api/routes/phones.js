@@ -6,7 +6,7 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(req, res, next) {
   // get phones array
-  let phones = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
+  let phones = JSON.parse(fs.readFileSync('./data/phones.json', 'utf8'));
   if(phones){
     // handle success
     var filters = {
@@ -71,7 +71,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/:id', function(req, res, next) {
   
-  let content = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
+  let content = JSON.parse(fs.readFileSync('./data/phones.json', 'utf8'));
   let phone = content.find(item => item["id"] == req.params.id);
   if(phone){
     res.status(200).json(phone);
@@ -81,7 +81,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post("/", function(req, res, next) {
-  let content = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
+  let content = JSON.parse(fs.readFileSync('./data/phones.json', 'utf8'));
   if (req.body.name && req.body.brand && req.body.operating_system && req.body.price && req.body.quantity && req.body.availability_date && req.body.image) {
     let product = {
       "id": content[content.length-1].id + 1,
@@ -102,7 +102,7 @@ router.post("/", function(req, res, next) {
         res.status(403).send({ message: "Product already exist." });
       } else {
         content.push(product);
-        fs.writeFile('./phones.json', JSON.stringify(content), function (err) { 
+        fs.writeFile('./data/phones.json', JSON.stringify(content), function (err) { 
           if (err){
             throw err;
           } else{
@@ -122,13 +122,13 @@ router.post("/", function(req, res, next) {
 // delete
 router.delete('/:id', function(req, res) {
   console.log(req.params.id);
-  let phones = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
+  let phones = JSON.parse(fs.readFileSync('./data/phones.json', 'utf8'));
   let phone = phones.find(phone => phone.id == req.params.id)
   console.log(phone);
   if(phone){
     let updatedPhones = phones.filter(phone => phone.id != req.params.id);
     try {
-      fs.writeFileSync('./phones.json', JSON.stringify(updatedPhones));
+      fs.writeFileSync('./data/phones.json', JSON.stringify(updatedPhones));
       res.status(200).send({ message: `Deleting phone ${req.params.id}` });
     } catch (err) {
       throw err;
@@ -139,7 +139,7 @@ router.delete('/:id', function(req, res) {
 
 // update
 router.put("/:id", function(req, res, next) {
-  let content = JSON.parse(fs.readFileSync('./phones.json', 'utf8'));
+  let content = JSON.parse(fs.readFileSync('./data/phones.json', 'utf8'));
   let contentIds = content.map(element => element.id);
   let index = contentIds.indexOf(Number(req.params.id));
   let phone = content.find(phone => phone.id == req.params.id);
@@ -160,7 +160,7 @@ router.put("/:id", function(req, res, next) {
     console.log(updatedProduct);
     if (validateProduct(updatedProduct)) {
         content[index] = updatedProduct;
-        fs.writeFile('./phones.json', JSON.stringify(content), function (err) { 
+        fs.writeFile('./data/phones.json', JSON.stringify(content), function (err) { 
           if (err){
             throw err;
           } else{

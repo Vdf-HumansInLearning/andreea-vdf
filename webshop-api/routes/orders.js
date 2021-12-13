@@ -4,7 +4,7 @@ const { ServerResponse } = require('http');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-  let orders = JSON.parse(fs.readFileSync('./orders.json', 'utf8'));
+  let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
   if(orders){
     res.status(200).json(orders);
   } else {
@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id', function(req, res, next) {
-    let orders = JSON.parse(fs.readFileSync('./orders.json', 'utf8'));
+    let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
     let order = orders.find(order => order.id == req.params.id)
     if(order){
       res.status(200).json(order);
@@ -23,8 +23,8 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-    let orders = JSON.parse(fs.readFileSync('./orders.json', 'utf8'));
-    let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+    let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
+    let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
     let user = users.find(user => user.email === req.body.email);
     if (user && req.body.name && req.body.email && req.body.products && req.body.quntity && req.body.payment) {
       let order = {
@@ -50,7 +50,7 @@ router.post('/', function(req, res, next) {
   
       
         orders.push(order);
-        fs.writeFile('./orders.json', JSON.stringify(orders), function (err) { 
+        fs.writeFile('./data/orders.json', JSON.stringify(orders), function (err) { 
             if (err) {
                 throw err;
             } else {
@@ -65,12 +65,12 @@ router.post('/', function(req, res, next) {
 
 
 router.delete('/:id', function(req, res) {
-    let orders = JSON.parse(fs.readFileSync('./orders.json', 'utf8'));
+    let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
     let order = orders.find(order => order.id == req.params.id)
     if(order){
       let updatedOrders = orders.filter(order => order.id != req.params.id);
       try {
-        fs.writeFileSync('./orders.json', JSON.stringify(updatedOrders));
+        fs.writeFileSync('./data/orders.json', JSON.stringify(updatedOrders));
         res.status(200).send({ message: `Deleting order ${req.params.id}` });
       } catch (err) {
         throw err;

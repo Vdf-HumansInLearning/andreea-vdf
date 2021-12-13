@@ -3,7 +3,7 @@ const fs = require('fs');
 var router = express.Router();
 
 router.post('/login', function(req, res, next) {
-  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+  let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
   let user = users.find(user => user.email === req.body.email && user.password === req.body.password);
   if(user){
     res.status(200).json(user);
@@ -13,7 +13,7 @@ router.post('/login', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-  let users = JSON.parse(fs.readFileSync('./users.json', 'utf8'));
+  let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
   if (req.body.name && req.body.username && req.body.email && req.body.password) {
     let user = {
       "id": users[users.length-1].id + 1,
@@ -47,7 +47,7 @@ router.post('/register', function(req, res, next) {
         res.status(403).send({ message: "User already exist." });
       } else {
         users.push(user);
-        fs.writeFile('./users.json', JSON.stringify(users), function (err) { 
+        fs.writeFile('./data/users.json', JSON.stringify(users), function (err) { 
           if (err) {
             throw err;
           } else {
