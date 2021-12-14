@@ -1,5 +1,6 @@
 // phone store exercise
 
+// get items from cart
 let localStorageItems = localStorage.getItem('items');
 if(localStorageItems){
     let localStorageObject = JSON.parse(localStorageItems);
@@ -106,6 +107,38 @@ document.getElementById("phones-link").classList = "nav-link active";
         window.location.href = url;
     });
 
+    // ADD TO CART
+    const addCartBtn = document.querySelectorAll(".add-to-cart");
+
+    addCartBtn.forEach(item => {
+        item.addEventListener("click", () => {
+            let name = item.parentElement.querySelector(".title").textContent + " " + item.parentElement.querySelector(".subtitle").textContent;
+            let price = item.parentElement.querySelector(".price").textContent;
+            var existing = localStorage.getItem('items');
+            if(existing){
+                let count = 0;
+                const parsedObject = JSON.parse(existing);
+                for(let i=0;i<parsedObject.length;i++){
+                    if(parsedObject[i].name === name){
+                        parsedObject[i].quantity += 1;
+                        count +=1;              
+                    }
+                }
+                console.log(count);
+                if(count < 1){
+                    parsedObject.push({name: name, price : price, quantity : 1 });
+                    document.getElementById("cart-items").textContent = Number(document.getElementById("cart-items").textContent) + 1;
+                }
+                localStorage.setItem("items", JSON.stringify(parsedObject)); 
+            } else {
+                const items =  [{name: name, price : price, quantity : 1 }];
+                localStorage.setItem("items", JSON.stringify(items));
+                document.getElementById("cart-items").textContent = Number(document.getElementById("cart-items").textContent) + 1;
+            }
+        });
+    });
+
+    // action for ADD new phone
     if(document.getElementById("display-add-form")){
         var myModal = new bootstrap.Modal(document.getElementById("phone-added"), {});
         document.getElementById("display-add-form").addEventListener("click", function() {
@@ -293,6 +326,7 @@ document.getElementById("phones-link").classList = "nav-link active";
         });
     }
 
+    // actions for EDIT phone
     let editBtn = document.querySelectorAll(".edit-btn")
     if(editBtn.length > 0) {
         let updateModal = new bootstrap.Modal(document.getElementById("phone-updated"), {});
@@ -498,6 +532,7 @@ document.getElementById("phones-link").classList = "nav-link active";
         })
     }
 
+    // actions for DELETE phone
     let deleteBtn = document.querySelectorAll(".delete-btn")
     if(deleteBtn.length > 0) {
         deleteBtn.forEach( item => {
@@ -513,38 +548,7 @@ document.getElementById("phones-link").classList = "nav-link active";
         })
     }   
 
-const addCartBtn = document.querySelectorAll(".add-to-cart");
 
-addCartBtn.forEach(item => {
-    item.addEventListener("click", () => {
-        let name = item.parentElement.querySelector(".title").textContent + " " + item.parentElement.querySelector(".subtitle").textContent;
-        let price = item.parentElement.querySelector(".price").textContent;
-        var existing = localStorage.getItem('items');
-        if(existing){
-            let count = 0;
-            const parsedObject = JSON.parse(existing);
-            console.log(parsedObject);
-            for(let i=0;i<parsedObject.length;i++){
-                console.log(parsedObject[i]);
-                if(parsedObject[i].name === name){
-                    parsedObject[i].quantity += 1;
-                    count +=1;
-                    console.log(parsedObject[i]);               
-                }
-            }
-            console.log(count);
-            if(count < 1){
-                parsedObject.push({name: name, price : price, quantity : 1 });
-                document.getElementById("cart-items").textContent = Number(document.getElementById("cart-items").textContent) + 1;
-            }
-            localStorage.setItem("items", JSON.stringify(parsedObject)); 
-        } else {
-            const items =  [{name: name, price : price, quantity : 1 }];
-            localStorage.setItem("items", JSON.stringify(items));
-            document.getElementById("cart-items").textContent = Number(document.getElementById("cart-items").textContent) + 1;
-        }
-    });
-});
 // FUNCTIONS
 
     function validateProduct(product) {

@@ -1,5 +1,4 @@
 var express = require('express');
-const fs = require('fs');
 const axios = require('axios').default;
 var router = express.Router();
 
@@ -34,7 +33,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post("/", function(req, res, next) {
-  res.send(`Adding phone ${req.body.name}`);
   axios.post('http://localhost:3001/phones', {
     name: req.body.name,
     brand: req.body.brand,
@@ -50,7 +48,7 @@ router.post("/", function(req, res, next) {
     "content-type": "application/json",
   }})
   .then(function (response) {
-    console.log(response);
+    res.status(200).send(`Adding phone ${req.body.name}`);
   })
   .catch(function (error) {
     res.status(400).send({ message: "Bad request" });
@@ -59,8 +57,6 @@ router.post("/", function(req, res, next) {
 })
 
 router.put("/:id", function(req, res, next) {
-  res.send(`Updating phone ${req.body.name}`);
-  console.log(req.body);
   axios.put(`http://localhost:3001/phones/${req.params.id}`, {
     name: req.body.name,
     brand: req.body.brand,
@@ -76,7 +72,7 @@ router.put("/:id", function(req, res, next) {
     "content-type": "application/json",
   }})
   .then(function (response) {
-    console.log(response);
+    res.status(200).send(`Updating phone ${req.body.name}`);
   })
   .catch(function (error) {
     res.status(400).send({ message: "Bad request" });

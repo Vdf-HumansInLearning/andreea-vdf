@@ -23,38 +23,39 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+  console.log(req.body.data);
     let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
     let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
-    let user = users.find(user => user.email === req.body.email);
-    if (user && req.body.name && req.body.email && req.body.products && req.body.quntity && req.body.payment) {
+    let user = users.find(user => user.id == req.body.data.user);
+    console.log(user);
+    console.log(orders)
+    if (user && req.body.data) {
+      let id = 1;
+      if (orders.length > 0){
+        id = orders[orders.length-1].id + 1
+      }
       let order = {
-        "id": orders[orders.length-1].id + 1,
+        "id": id,
         "user-id": user.id,
-        "name": req.body.name,
-        "email": req.body.email,
+        "name": user.name,
+        "email": user.email,
         "address": {
-          "street": "",
-          "suite": "",
-          "city": "",
-          "zipcode": ""
+          "street": user.address.street,
+          "suite": user.address.suite,
+          "city": user.address.city,
+          "zipcode": user.address.zipcode
         },
-        "phone": "",
-        "order": [
-            {
-                "product": req.body.product,
-                "quantity": req.body.quantity
-            }
-        ],
-        "payment": req.body.payment
+        "phone": user.phone,
+        "order": req.body.data.items,
+        "payment": 'card'
       };
-  
-      
+
         orders.push(order);
         fs.writeFile('./data/orders.json', JSON.stringify(orders), function (err) { 
             if (err) {
                 throw err;
             } else {
-                res.send({ message: "Successfully registered" });
+                res.status(200).send({ message: "Successfully registered" });
             }
         })
     } else {

@@ -93,6 +93,17 @@ if(localStorageItems && localStorageObject.length > 0){
     let orderBtn = document.createElement("button");
     orderBtn.setAttribute("id","order-btn");
     orderBtn.setAttribute("class","order-btn btn btn-outline-dark");
+    if(document.cookie == false){
+        orderBtn.disabled = true;
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+        
+        orderBtnDiv.setAttribute("data-bs-toggle","tooltip");
+        orderBtnDiv.setAttribute("data-bs-placement","bottom");
+        orderBtnDiv.setAttribute("title","You need to log in before ordering");
+    }
     orderBtn.textContent = "Place Order";
     orderBtnDiv.appendChild(orderBtn);
     document.getElementById("container").appendChild(orderBtnDiv);
@@ -224,9 +235,27 @@ if(localStorageItems && localStorageObject.length > 0){
     });
 
     orderBtn.addEventListener("click", () => {
-        localStorage.removeItem("items");
-        var myModal = new bootstrap.Modal(document.getElementById("order-success"), {});
-        myModal.show();
+        const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('user_id='))
+        .split('=')[1];
+        fetch('http://localhost:3000/orders',{
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({items : localStorageObject, user : cookieValue})
+        })
+        .then(data => {
+            if(data.status === 200){
+                localStorage.removeItem("items");
+                var myModal = new bootstrap.Modal(document.getElementById("order-success"), {});
+                myModal.show();
+            } else {
+                document.getElementById("invalid-order").classList.remove("d-none");
+            }
+        })
+        
        
     });
     var myModalEl = document.getElementById('order-success')
