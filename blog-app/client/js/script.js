@@ -1,4 +1,7 @@
+
+let articlesPerPage = 4;
 window.onload = function(e) {
+    
     if(window.location.hash === ""){
         window.location.hash = "home";
     }
@@ -44,128 +47,88 @@ function displayHtml(path) {
 // get articles from db.json
 function getArticles(path,body){
     // in case the path contains article, we will display the Article page
+    
     if(path.startsWith("article")) {
         const articleId = path.slice(11);
         //let article = articles.filter(item => item.id === Number(articleId));
 
-        let containerDiv = document.createElement("div");
-        containerDiv.setAttribute("class","container");
-
-        let themeButton = document.createElement("button");
-        themeButton.setAttribute("class","theme-btn");
-        themeButton.setAttribute("id","theme-btn");
-        let icon = document.createElement("i");
-
-        let localStorageTheme = localStorage.getItem('theme');
-        if(localStorageTheme === 'dark'){
-            icon.setAttribute("class","far fa-sun");
-            icon.setAttribute("id","light-icon");
-        } else {
-            icon.setAttribute("class","far fa-moon");
-            icon.setAttribute("id","dark-icon");
-        }
-            
-        themeButton.appendChild(icon);
-        containerDiv.appendChild(themeButton);
-        containerDiv.appendChild(createNav());
-
-        let main = document.createElement("main");
-        main.setAttribute("class","main");
+        
 
         fetch(`http://localhost:3000/articles/${articleId}`)
         .then(
             function(response) {
-            if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' +
-                response.status);
-                return;
-            }
 
             // Examine the text in the response
             response.json().then(function(data) {
-
-                main.appendChild(createArticleDetails(data));
-                
-            });
-        }
-        )
-        .catch(function(err) {
-            console.log('Fetch Error :-S', err);
-        });
-        
-
-        containerDiv.appendChild(main);
-        fetch(`http://localhost:3000/articles`)
-        .then(
-            function(response) {
-            if (response.status !== 200) {
-                console.log('Looks like there was a problem. Status Code: ' +
-                response.status);
-                return;
-            }
-
-            // Examine the text in the response
-            response.json().then(function(data) {
-
-                containerDiv.appendChild(createFooterDetails(data));
-                
-            });
-        }
-        )
-        .catch(function(err) {
-            console.log('Fetch Error :-S', err);
-        });
-        
-        body.appendChild(containerDiv);
-
-        document.getElementById("theme-btn").addEventListener("click", function() {
+                if (response.status === 200) {
                     
-            if(document.getElementById("theme-btn").childNodes[0].id === "dark-icon"){
-                document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
-                let lightIcon = document.createElement("i");
-                lightIcon.setAttribute("class","far fa-sun");
-                lightIcon.setAttribute("id","light-icon");
-                document.getElementById("theme-btn").appendChild(lightIcon);
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem("theme", "dark");
-            } else {
-                document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
-                let darkIcon = document.createElement("i");
-                darkIcon.setAttribute("class","far fa-moon");
-                darkIcon.setAttribute("id","dark-icon");
-                document.getElementById("theme-btn").appendChild(darkIcon);
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem("theme", "light");
-            }
-            
+                    let containerDiv = document.createElement("div");
+                    containerDiv.setAttribute("class","container");
+
+                    let themeButton = document.createElement("button");
+                    themeButton.setAttribute("class","theme-btn");
+                    themeButton.setAttribute("id","theme-btn");
+                    let icon = document.createElement("i");
+
+                    let localStorageTheme = localStorage.getItem('theme');
+                    if(localStorageTheme === 'dark'){
+                        icon.setAttribute("class","far fa-sun");
+                        icon.setAttribute("id","light-icon");
+                    } else {
+                        icon.setAttribute("class","far fa-moon");
+                        icon.setAttribute("id","dark-icon");
+                    }
+                        
+                    themeButton.appendChild(icon);
+                    containerDiv.appendChild(themeButton);
+                    containerDiv.appendChild(createNav());
+
+                    let main = document.createElement("main");
+                    main.setAttribute("class","main");
+                    main.appendChild(createArticleDetails(data));
+
+                    containerDiv.appendChild(main);
+                    fetch(`http://localhost:3000/articles`)
+                    .then(
+                        function(response) {
+
+                        // Examine the text in the response
+                        response.json().then(function(data) {
+                            if (response.status !== 200) {
+                                console.log('Looks like there was a problem. Status Code: ' +
+                                response.status);
+                                return;
+                            } else {
+                                containerDiv.appendChild(createFooterDetails(data));
+                            }
+                        });
+                    }
+                    )
+                    .catch(function(err) {
+                        console.log('Fetch Error :-S', err);
+                    });
+                    
+                    body.appendChild(containerDiv);
+
+                    eventListenerTheme();
+                } else {
+                    body.appendChild(createNotFoundPage());
+
+                }
+            });
+        }
+        )
+        .catch(function(err) {
+            console.log('Fetch Error :-S', err);
         });
+        
+
+        
 
     // in case the path is home, we will display the Home page
-    } else if (path === "home") {
-        let containerDiv = document.createElement("div");
-        containerDiv.setAttribute("class","container");
-
-        let themeButton = document.createElement("button");
-        themeButton.setAttribute("class","theme-btn");
-        themeButton.setAttribute("id","theme-btn");
-        let icon = document.createElement("i");
-
-        let localStorageTheme = localStorage.getItem('theme');
-        if(localStorageTheme === 'dark'){
-            icon.setAttribute("class","far fa-sun");
-            icon.setAttribute("id","light-icon");
-        } else {
-            icon.setAttribute("class","far fa-moon");
-            icon.setAttribute("id","dark-icon");
-        }
-            
-        themeButton.appendChild(icon);
-        containerDiv.appendChild(themeButton);
-        containerDiv.appendChild(createNav());
-        containerDiv.appendChild(createAddArticleContainer());
-
-        let main = document.createElement("main");
-        main.setAttribute("class","main");
+    } else if (path.startsWith("home")) {
+        const page = path.slice(5);
+        
         
         fetch('http://localhost:3000/articles')
         .then(
@@ -178,77 +141,85 @@ function getArticles(path,body){
 
             // Examine the text in the response
             response.json().then(function(data) {
+                if((Math.floor(data.length / articlesPerPage) <= Number(page) && Math.floor(data.length / articlesPerPage) >=1) || (Math.floor(data.length / articlesPerPage) >= Number(page) && (data.length % articlesPerPage) > 0)){
+                    let containerDiv = document.createElement("div");
+                    containerDiv.setAttribute("class","container");
 
-                for(let i=0; i< data.length;i++){
-                    main.appendChild(createArticleHome(data[i]));
-                }
+                    let themeButton = document.createElement("button");
+                    themeButton.setAttribute("class","theme-btn");
+                    themeButton.setAttribute("id","theme-btn");
+                    let icon = document.createElement("i");
 
-                //
-                containerDiv.appendChild(main);
-                console.log(main);
-                containerDiv.appendChild(createFooterHome());
-                containerDiv.appendChild(createModal());
-                body.appendChild(containerDiv);
-                console.log(body);
-
-                // CONSTANTS
-                const addBtn = document.getElementById("add-article");
-                const cancelBtn = document.getElementById("cancel");
-                const saveBtn = document.getElementById("save");
-                const MODAL = document.querySelector(".modal__overlay");
-                const deleteButtons = document.querySelectorAll(".btn-delete");
-                const editButtons = document.querySelectorAll(".btn-edit");
-                console.log(editButtons);
-                // EVENT LISTENERS
-                addBtn.addEventListener('click', () => {
-                    MODAL.style.display = "block";
-                    cancelBtn.addEventListener('click', () => {
-                        MODAL.style.display = "none";
-                    });
-
-                    saveBtn.addEventListener('click', () => {
-                        addArticle();
-                    });
-                });
-
-                
-                // the delete and edit buttons for each article
-                deleteButtons.forEach( item => {
-                    item.addEventListener('click', () => {
-                        id = item.parentElement.id;
-                        deleteArticle(id);
-                    });
-                });
-
-                editButtons.forEach( item => {
-                    item.addEventListener('click', () => {
-                        id = item.parentElement.id;
-                        let article = data.find(item => item.id == id);
-                        editArticle(id,article);
-                    });
-                });
-
-                document.getElementById("theme-btn").addEventListener("click", function() {
-                        
-                    if(document.getElementById("theme-btn").childNodes[0].id === "dark-icon"){
-                        document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
-                        let lightIcon = document.createElement("i");
-                        lightIcon.setAttribute("class","far fa-sun");
-                        lightIcon.setAttribute("id","light-icon");
-                        document.getElementById("theme-btn").appendChild(lightIcon);
-                        document.documentElement.setAttribute('data-theme', 'dark');
-                        localStorage.setItem("theme", "dark");
+                    let localStorageTheme = localStorage.getItem('theme');
+                    if(localStorageTheme === 'dark'){
+                        icon.setAttribute("class","far fa-sun");
+                        icon.setAttribute("id","light-icon");
                     } else {
-                        document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
-                        let darkIcon = document.createElement("i");
-                        darkIcon.setAttribute("class","far fa-moon");
-                        darkIcon.setAttribute("id","dark-icon");
-                        document.getElementById("theme-btn").appendChild(darkIcon);
-                        document.documentElement.setAttribute('data-theme', 'light');
-                        localStorage.setItem("theme", "light");
+                        icon.setAttribute("class","far fa-moon");
+                        icon.setAttribute("id","dark-icon");
                     }
+                        
+                    themeButton.appendChild(icon);
+                    containerDiv.appendChild(themeButton);
+                    containerDiv.appendChild(createNav());
+                    containerDiv.appendChild(createAddArticleContainer());
+
+                    let main = document.createElement("main");
+                    main.setAttribute("class","main");
                     
-                });
+                    let i = (Number(page) - 1) * articlesPerPage;
+                    let arrArticles = data.slice(i,articlesPerPage * Number(page));
+                    for(let i=0; i< arrArticles.length;i++){
+                        main.appendChild(createArticleHome(arrArticles[i]));
+                    }
+
+                    //
+                    containerDiv.appendChild(main);
+                    containerDiv.appendChild(createFooterHome(page, data));
+                    containerDiv.appendChild(createModal());
+                    body.appendChild(containerDiv);
+
+                    // CONSTANTS
+                    const addBtn = document.getElementById("add-article");
+                    const cancelBtn = document.getElementById("cancel");
+                    const saveBtn = document.getElementById("save");
+                    const MODAL = document.querySelector(".modal__overlay");
+                    const deleteButtons = document.querySelectorAll(".btn-delete");
+                    const editButtons = document.querySelectorAll(".btn-edit");
+                    // EVENT LISTENERS
+                    addBtn.addEventListener('click', () => {
+                        MODAL.style.display = "block";
+                        cancelBtn.addEventListener('click', () => {
+                            MODAL.style.display = "none";
+                        });
+
+                        saveBtn.addEventListener('click', () => {
+                            addArticle();
+                        });
+                    });
+
+                    
+                    // the delete and edit buttons for each article
+                    deleteButtons.forEach( item => {
+                        item.addEventListener('click', () => {
+                            id = item.parentElement.id;
+                            deleteArticle(id);
+                        });
+                    });
+
+                    editButtons.forEach( item => {
+                        item.addEventListener('click', () => {
+                            id = item.parentElement.id;
+                            let article = data.find(item => item.id == id);
+                            editArticle(id,article);
+                        });
+                    });
+
+                    eventListenerTheme();
+                } else {
+                    body.appendChild(createNotFoundPage());
+                }
+                
                 
             });
         }
@@ -258,7 +229,7 @@ function getArticles(path,body){
         });
         
     } else {
-        body.innerHTML = "404 Not Found"
+        body.appendChild(createNotFoundPage());
     }
 }
 
@@ -303,7 +274,6 @@ function addArticle() {
 
 // give the form inputs the values of the article to edit; make a call to the server to update the article
 function editArticle(id,article) {
-    console.log(id);
     const MODAL = document.querySelector(".modal__overlay");
     const CANCELBTN = document.getElementById("cancel");
     const SAVEBTN = document.getElementById("save");
@@ -378,6 +348,30 @@ function deleteArticle(id) {
     })
 }
 
+function eventListenerTheme() {
+    document.getElementById("theme-btn").addEventListener("click", function() {
+                                
+        if(document.getElementById("theme-btn").childNodes[0].id === "dark-icon"){
+            document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
+            let lightIcon = document.createElement("i");
+            lightIcon.setAttribute("class","far fa-sun");
+            lightIcon.setAttribute("id","light-icon");
+            document.getElementById("theme-btn").appendChild(lightIcon);
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.getElementById("theme-btn").removeChild(document.getElementById("theme-btn").childNodes[0]);
+            let darkIcon = document.createElement("i");
+            darkIcon.setAttribute("class","far fa-moon");
+            darkIcon.setAttribute("id","dark-icon");
+            document.getElementById("theme-btn").appendChild(darkIcon);
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem("theme", "light");
+        }
+        
+    });
+}
+
 // removes everything in the body and call de loadContent function in order to display the updated articles
 function cleanupAndLoad() {
     let body = document.getElementsByTagName("body")[0];
@@ -400,7 +394,7 @@ function createNav(){
         navLi.setAttribute("class","nav__item");
         let navAnchor = document.createElement("a");
         navAnchor.setAttribute("class","nav__link");
-        navAnchor.setAttribute("href","/client/#home");
+        navAnchor.setAttribute("href","/client/#home/1");
         navAnchor.textContent = navLinks[i];
         navLi.appendChild(navAnchor);
         navUl.appendChild(navLi);
@@ -470,7 +464,7 @@ function createArticleHome(article) {
     let contentDiv = document.createElement("div");
     contentDiv.setAttribute("class","content__container");
     let paragraph = document.createElement("p");
-    paragraph.textContent = article.content[0];
+    paragraph.textContent = article.content.substring(0,article.content.length/2) + " ...";
     contentDiv.appendChild(paragraph);
 
     let readMoreDiv = document.createElement("div");
@@ -523,15 +517,25 @@ function createArticleDetails(article) {
 
     let contentDiv = document.createElement("div");
     contentDiv.setAttribute("class","content__container");
-    for(let j=0;j<article.content.length;j++){
+
+    let secondParagraph = article.content.substring(Math.floor(article.content.length/2) + 1);
+    let periodIndex = secondParagraph.indexOf('.');
+    let firstParagraph = article.content.substring(0,Math.floor(article.content.length/2));
+    firstParagraph = firstParagraph.concat(secondParagraph.slice(0,periodIndex+1));
+    secondParagraph = secondParagraph.slice(periodIndex+1);
+
+    for(let j=0;j<2;j++){
         let paragraph = document.createElement("p");
-        if(j === article.content.length / 2){
+        if(j === 0){
+            paragraph.textContent = firstParagraph;
+        } else {
             let saying = document.createElement("p");
             saying.setAttribute("class","saying");
             saying.textContent = article.saying;
             contentDiv.appendChild(saying);
-        }
-        paragraph.textContent = article.content[j];
+            paragraph.textContent = secondParagraph;
+        }   
+        
         contentDiv.appendChild(paragraph);
     }
 
@@ -544,17 +548,33 @@ function createArticleDetails(article) {
 }
 
 // create the footer for the home page
-function createFooterHome() {
+function createFooterHome(page,articles) {
+    
     let footer = document.createElement("footer");
     footer.setAttribute("class","footer");
-    let prevBtn = document.createElement("button");
-    prevBtn.setAttribute("class","footer__link");
-    prevBtn.textContent = "previous";
-    let nextBtn = document.createElement("button");
-    nextBtn.setAttribute("class","footer__link footer__link--next");
-    nextBtn.textContent = "next";
-    footer.appendChild(prevBtn);
-    footer.appendChild(nextBtn);
+    if(Number(page) > 1){
+        let prevA = document.createElement('a');
+        prevA.setAttribute('href',`/client/#home/${Number(page)-1}`)
+        let prevBtn = document.createElement("button");
+        prevBtn.setAttribute("class","footer__link");
+        prevBtn.textContent = "previous";
+        prevA.appendChild(prevBtn);
+        footer.appendChild(prevA);
+    } else {
+
+    }
+    if((articles.length % articlesPerPage) > 0 && ((Math.floor(articles.length / articlesPerPage) >= Number(page)) )) {
+        let nextA = document.createElement('a');
+        nextA.setAttribute('href',`/client/#home/${Number(page)+1}`)
+        let nextBtn = document.createElement("button");
+        nextBtn.setAttribute("class","footer__link footer__link--next");
+        nextBtn.textContent = "next";
+        let prevDiv = document.createElement("div");
+        nextA.appendChild(nextBtn);
+        footer.appendChild(prevDiv);
+        footer.appendChild(nextA);
+    }
+    
 
     return footer;
 }
@@ -650,4 +670,26 @@ function createModal() {
 
     return modalContainerDiv;
 
+}
+
+function createNotFoundPage() {
+    let notFoundDiv = document.createElement('div');
+    notFoundDiv.setAttribute("class","not-found-container");
+    let title = document.createElement("h3");
+    title.setAttribute('class','title');
+    title.textContent = "404";
+    let subtitle = document.createElement('h4');
+    subtitle.setAttribute('class','subtitle');
+    subtitle.textContent = "Page Not Found";
+    let backBtn = document.createElement('button');
+    backBtn.setAttribute("class","back-button");
+    let homeLink = document.createElement('a');
+    homeLink.setAttribute('href',"/client/#home/1");
+    backBtn.textContent = "Go Back Home";
+    homeLink.appendChild(backBtn);
+    notFoundDiv.appendChild(title);
+    notFoundDiv.appendChild(subtitle);
+    notFoundDiv.appendChild(homeLink);
+
+    return notFoundDiv;
 }

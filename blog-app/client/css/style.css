@@ -261,6 +261,20 @@ main article:not(:first-child){
     background-color: var(--pink);
 }
 
+.not-found-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.not-found-container .subtitle{
+    text-transform: uppercase;
+    font-weight: bold;
+    margin:10px 0;
+}
+
 /* DETAILS PAGE */
 
 .saying {
