@@ -66,7 +66,7 @@ describe("Phones.js unit tests", function() {
         var os = ["iOS"];
         expect(phones.getProductsByOS(item,os)).to.equal(false);
     });
-    it("correctly search the phones by brand", function(){
+    it("correctly search the phones by brand - true case", function(){
         var item = {
             "name":"Galaxy A12",
             "brand":"Samsung",
@@ -80,5 +80,21 @@ describe("Phones.js unit tests", function() {
          };
         var searchValue = "sam";
         expect(phones.searchProducts(item,searchValue)).to.equal(true);
+    });
+    it("correctly search the phones by brand - false case", function(){
+        var item = {
+            "id": 13,
+            "name": "P20",
+            "brand": "Huawei",
+            "operating_system": "Android",
+            "price": 2400,
+            "discount": 0,
+            "quantity": 300,
+            "availability_date": "2021-04-13",
+            "rating": -1,
+            "image": "toppng.com-huawei-p8-1200x900.png"
+         };
+        var searchValue = "sam";
+        expect(phones.searchProducts(item,searchValue)).to.equal(false);
     });
 })
