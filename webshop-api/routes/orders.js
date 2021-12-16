@@ -2,6 +2,7 @@ var express = require('express');
 const fs = require('fs');
 const { ServerResponse } = require('http');
 var router = express.Router();
+const uuid = require("uuid");
 
 router.get('/', function(req, res, next) {
   let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
@@ -18,8 +19,14 @@ router.get('/:id', function(req, res, next) {
     if(order){
       res.status(200).json(order);
     } else {
-      res.status(404).send({ message: "404 Not Found" });
+      res.status(404).send("404 Not Found");
     }
+});
+
+router.get('/user/:id', function(req, res, next) {
+  let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
+  let userOrders = orders.filter(order => order['user-id'] == req.params.id)
+  res.status(200).json(userOrders);
 });
 
 router.post('/', function(req, res, next) {
@@ -27,15 +34,11 @@ router.post('/', function(req, res, next) {
     let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
     let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
     let user = users.find(user => user.id == req.body.data.user);
-    console.log(user);
-    console.log(orders)
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     if (user && req.body.data) {
-      let id = 1;
-      if (orders.length > 0){
-        id = orders[orders.length-1].id + 1
-      }
       let order = {
-        "id": id,
+        "id": uuid.v1(),
         "user-id": user.id,
         "name": user.name,
         "email": user.email,
@@ -47,7 +50,8 @@ router.post('/', function(req, res, next) {
         },
         "phone": user.phone,
         "order": req.body.data.items,
-        "payment": 'card'
+        "payment": 'card',
+        "date" : date
       };
 
         orders.push(order);

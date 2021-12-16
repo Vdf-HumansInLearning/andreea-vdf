@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include('./partials/_head'); %>
+<body>
+    <%- include('./partials/_nav'); %>
+    <main class="main">
+        <% if(logged_in){ %>
+            <% if(orders.length > 0){ %>
+                <ul class="list-group">
+                    <% for(var i = 0; i < orders.length; i++) {%>
+                        <li class="list-group-item d-flex justify-content-between align-items-center" id="item-<%= orders[i].id %>">
+                            <div class="ms-2 me-auto">
+                                <p class="name fw-bold">Order <span class="text-success">#<%= orders[i].id %></span></p>
+                            </div>
+                            <button class="btn-collapse btn btn-outline-dark collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= orders[i].id %>" aria-expanded="false" aria-controls="collapseExample">
+                                <i class="fas fa-chevron-circle-down"></i>
+                            </button>
+                        </li>
+                        <div class="collapse" id="collapse<%= orders[i].id %>">
+                            <div class="card card-body">
+                                <h6>Email: <span class="fw-light fst-italic"><%= orders[i].email %></span></h6>
+                                <h6>Phone: <span class="fw-light fst-italic"><%= orders[i].phone %></span></h6>
+                                <h6>Address: <span class="fw-light fst-italic"><%= orders[i].address.street %> street, <%= orders[i].address.suite %>, <%= orders[i].address.zipcode %>, <%= orders[i].address.city %></span></h6>
+                                <h6>Ordered on: <span class="fw-light fst-italic"><%= orders[i].date %></span></h6>
+                                <h6>Order: </h6>
+                                <% for(var j = 0; j < orders[i].order.length; j++) {%>
+                                    <div class="d-flex justify-content-between">
+                                        <div class="order-name">- <%=orders[i].order[j].name%></div>
+                                        <div class="order-name">Price: <%=orders[i].order[j].price%> RON</div>
+                                        <div class="order-name">Qty: <%=orders[i].order[j].quantity%></div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                </ul>
+            <% } else{ %>
+                <div class="text-center mt-5">
+                    <h3>You did not ordered anything yet</h3>
+                    <a href="/phones">Continue shopping</a>
+                </div>
+                
+            <% } %>
+        <% } else{ %>
+            <div class="text-center mt-5">
+                <h3>You're not allowed on this page</h3>
+                <a href="/">Go back to Home page</a>
+            </div>
+                
+        <% } %>
+    </main>
+    <%- include('./partials/_scripts'); %>
+    <script src="javascripts/orders.js"></script>
+</body>
+</html>
