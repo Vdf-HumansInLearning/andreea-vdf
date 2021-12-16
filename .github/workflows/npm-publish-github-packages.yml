@@ -4,12 +4,16 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
   push:
-    branches: [ master ]
+    branches:
+      - master
+    paths:
+      - webshop-api/**
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
+    paths:
+      - webshop-api/**
 
 jobs:
   build:
