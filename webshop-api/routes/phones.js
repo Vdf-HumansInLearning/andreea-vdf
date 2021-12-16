@@ -293,4 +293,4 @@ function getSorted(sort) {
   }
 }
 
-module.exports = {router,getProductsByBrand};
+module.exports = {router,getProductsByBrand,getProductsByOS,searchProducts};
