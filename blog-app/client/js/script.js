@@ -3,7 +3,7 @@ let articlesPerPage = 4;
 window.onload = function(e) {
     
     if(window.location.hash === ""){
-        window.location.hash = "home";
+        window.location.hash = "home/1";
     }
     onRouteChange(e);
     window.scrollTo(0, 0);
@@ -291,7 +291,7 @@ function editArticle(id,article) {
     imageInput.value = article.imgUrl;
     dateInput.value = article.info.date;
     sayingInput.value = article.saying;
-    contentInput.value = article.content.join("\r\n");
+    contentInput.value = article.content
   
     MODAL.style.display = "block";
     
