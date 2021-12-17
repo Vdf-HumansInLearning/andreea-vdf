@@ -50,7 +50,7 @@
       "imgAlt": "img/sarmale.jpg",
       "content": "werwerwrwer. sdadadadasd",
       "saying": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur, maxime?",
-      "id": 5
+      "id": 6
     },
     {
       "title": "Tip calculator app using HTML, CSS and JavaScript",
@@ -63,23 +63,8 @@
       "imgAlt": "img/sarmale.jpg",
       "content": "werwerwrwer. sdadadadasd",
       "saying": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur, maxime?",
-      "id": 6
-    }
-    ,
-    {
-      "title": "Tip calculator app using HTML, CSS and JavaScript",
-      "info": {
-        "subtitle": "Food",
-        "author": "Jonnathan Mercadina",
-        "date": "2021-11-01"
-      },
-      "imgUrl": "img/sarmale.jpg",
-      "imgAlt": "img/sarmale.jpg",
-      "content": "werwerwrwer. sdadadadasd",
-      "saying": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur, maxime?",
       "id": 7
-    }
-    ,
+    },
     {
       "title": "Tip calculator app using HTML, CSS and JavaScript",
       "info": {
@@ -92,6 +77,19 @@
       "content": "werwerwrwer. sdadadadasd",
       "saying": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur, maxime?",
       "id": 8
+    },
+    {
+      "title": "The complete guide to explore Trasilvania, with your bike",
+      "info": {
+        "subtitle": "Food",
+        "author": "Jonnathan Mercadin",
+        "date": "2021-04-13"
+      },
+      "imgUrl": "img/sarmale.jpg",
+      "imgAlt": "img/sarmale.jpg",
+      "content": "ashdajdsksaddskasd .sadajsdjadskhaskd. ajdsjsadkhadsk",
+      "saying": "Life is like riding a bicycle, to keep your balance you must keep moving",
+      "id": 9
     }
   ]
 }

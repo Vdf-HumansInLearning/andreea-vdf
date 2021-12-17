@@ -1,5 +1,5 @@
 
-let articlesPerPage = 4;
+let articlesPerPage = 3;
 window.onload = function(e) {
     
     if(window.location.hash === ""){
@@ -52,75 +52,79 @@ function getArticles(path,body){
         const articleId = path.slice(11);
         //let article = articles.filter(item => item.id === Number(articleId));
 
-        
+        if(articleId){
+            fetch(`http://localhost:3000/articles/${articleId}`)
+            .then(
+                function(response) {
 
-        fetch(`http://localhost:3000/articles/${articleId}`)
-        .then(
-            function(response) {
-
-            // Examine the text in the response
-            response.json().then(function(data) {
-                if (response.status === 200) {
-                    
-                    let containerDiv = document.createElement("div");
-                    containerDiv.setAttribute("class","container");
-
-                    let themeButton = document.createElement("button");
-                    themeButton.setAttribute("class","theme-btn");
-                    themeButton.setAttribute("id","theme-btn");
-                    let icon = document.createElement("i");
-
-                    let localStorageTheme = localStorage.getItem('theme');
-                    if(localStorageTheme === 'dark'){
-                        icon.setAttribute("class","far fa-sun");
-                        icon.setAttribute("id","light-icon");
-                    } else {
-                        icon.setAttribute("class","far fa-moon");
-                        icon.setAttribute("id","dark-icon");
-                    }
+                // Examine the text in the response
+                response.json().then(function(data) {
+                    if (response.status === 200) {
                         
-                    themeButton.appendChild(icon);
-                    containerDiv.appendChild(themeButton);
-                    containerDiv.appendChild(createNav());
+                        let containerDiv = document.createElement("div");
+                        containerDiv.setAttribute("class","container");
 
-                    let main = document.createElement("main");
-                    main.setAttribute("class","main");
-                    main.appendChild(createArticleDetails(data));
+                        let themeButton = document.createElement("button");
+                        themeButton.setAttribute("class","theme-btn");
+                        themeButton.setAttribute("id","theme-btn");
+                        let icon = document.createElement("i");
 
-                    containerDiv.appendChild(main);
-                    fetch(`http://localhost:3000/articles`)
-                    .then(
-                        function(response) {
+                        let localStorageTheme = localStorage.getItem('theme');
+                        if(localStorageTheme === 'dark'){
+                            icon.setAttribute("class","far fa-sun");
+                            icon.setAttribute("id","light-icon");
+                        } else {
+                            icon.setAttribute("class","far fa-moon");
+                            icon.setAttribute("id","dark-icon");
+                        }
+                            
+                        themeButton.appendChild(icon);
+                        containerDiv.appendChild(themeButton);
+                        containerDiv.appendChild(createNav());
 
-                        // Examine the text in the response
-                        response.json().then(function(data) {
-                            if (response.status !== 200) {
-                                console.log('Looks like there was a problem. Status Code: ' +
-                                response.status);
-                                return;
-                            } else {
-                                containerDiv.appendChild(createFooterDetails(data));
-                            }
+                        let main = document.createElement("main");
+                        main.setAttribute("class","main");
+                        main.appendChild(createArticleDetails(data));
+
+                        containerDiv.appendChild(main);
+                        fetch(`http://localhost:3000/articles`)
+                        .then(
+                            function(response) {
+
+                            // Examine the text in the response
+                            response.json().then(function(data) {
+                                if (response.status !== 200) {
+                                    console.log('Looks like there was a problem. Status Code: ' +
+                                    response.status);
+                                    return;
+                                } else {
+                                    containerDiv.appendChild(createFooterDetails(data));
+                                }
+                            });
+                        }
+                        )
+                        .catch(function(err) {
+                            console.log('Fetch Error :-S', err);
                         });
+                        
+                        body.appendChild(containerDiv);
+
+                        eventListenerTheme();
+                    } else {
+                        body.appendChild(createNotFoundPage());
+
                     }
-                    )
-                    .catch(function(err) {
-                        console.log('Fetch Error :-S', err);
-                    });
-                    
-                    body.appendChild(containerDiv);
-
-                    eventListenerTheme();
-                } else {
-                    body.appendChild(createNotFoundPage());
-
-                }
+                });
+            }
+            )
+            .catch(function(err) {
+                console.log('Fetch Error :-S', err);
             });
+        } else {
+            body.appendChild(createNotFoundPage());
         }
-        )
-        .catch(function(err) {
-            console.log('Fetch Error :-S', err);
-        });
+
+        
         
 
         
@@ -141,7 +145,17 @@ function getArticles(path,body){
 
             // Examine the text in the response
             response.json().then(function(data) {
-                if((Math.floor(data.length / articlesPerPage) <= Number(page) && Math.floor(data.length / articlesPerPage) >=1) || (Math.floor(data.length / articlesPerPage) >= Number(page) && (data.length % articlesPerPage) > 0)){
+                let length = 0;
+                if((data.length % articlesPerPage) > 0){
+                    length = Math.floor(data.length / articlesPerPage) + 1;
+                } else if ((data.length % articlesPerPage) === 0){
+                    length = Math.floor(data.length / articlesPerPage);
+                }
+                let pageArr = [];
+                for(let i=1; i<=length;i++){
+                    pageArr.push(i);
+                }
+                if(pageArr.includes(Number(page))){
                     let containerDiv = document.createElement("div");
                     containerDiv.setAttribute("class","container");
 
@@ -189,8 +203,10 @@ function getArticles(path,body){
                     // EVENT LISTENERS
                     addBtn.addEventListener('click', () => {
                         MODAL.style.display = "block";
+                        removeError();
                         cancelBtn.addEventListener('click', () => {
                             MODAL.style.display = "none";
+                            
                         });
 
                         saveBtn.addEventListener('click', () => {
@@ -243,6 +259,7 @@ function addArticle() {
     const sayingInput = document.getElementById("saying");
     const contentInput = document.getElementById("article-content");
     if(titleInput.value !== "" && tagInput.value !== "" && authorInput.value !== "" && imageInput.value !== "" && dateInput.value !== "" && sayingInput.value !== "" && contentInput.value !== ""){
+        removeError();
         fetch("http://localhost:3000/articles", {
             method: 'post',
             headers: {
@@ -257,7 +274,7 @@ function addArticle() {
                 },
                 "imgUrl":imageInput.value,
                 "imgAlt":imageInput.value,
-                "content":contentInput.value.split(/\r?\n/),
+                "content":contentInput.value,
                 "saying":sayingInput.value
             })
           })
@@ -269,6 +286,8 @@ function addArticle() {
           .catch(function (error) {
             console.log('Request failed', error);
           });
+    } else {
+        createError();
     }
 }
 
@@ -295,6 +314,7 @@ function editArticle(id,article) {
   
     MODAL.style.display = "block";
     
+    removeError();
 
     CANCELBTN.addEventListener('click', () => {
         titleInput.value = "";
@@ -304,48 +324,58 @@ function editArticle(id,article) {
         dateInput.value = "";
         sayingInput.value = "";
         contentInput.value = "";
+        removeError();
         MODAL.style.display = "none";
     });
 
     SAVEBTN.addEventListener('click', () => {
-        fetch(`http://localhost:3000/articles/${id}`, {
-            method: 'put',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                    "title":titleInput.value,
-                    "info":{
-                        "subtitle":tagInput.value,
-                        "author":authorInput.value,
-                        "date":dateInput.value
-                    },
-                    "imgUrl":imageInput.value,
-                    "imgAlt":imageInput.value,
-                    "content":contentInput.value.split(/\r?\n/),
-                    "saying":sayingInput.value
+        removeError();
+        if(titleInput.value !== "" && tagInput.value !== "" && authorInput.value !== "" && imageInput.value !== "" && dateInput.value !== "" && sayingInput.value !== "" && contentInput.value !== ""){
+            fetch(`http://localhost:3000/articles/${id}`, {
+                method: 'put',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                        "title":titleInput.value,
+                        "info":{
+                            "subtitle":tagInput.value,
+                            "author":authorInput.value,
+                            "date":dateInput.value
+                        },
+                        "imgUrl":imageInput.value,
+                        "imgAlt":imageInput.value,
+                        "content":contentInput.value,
+                        "saying":sayingInput.value
+                })
             })
-          })
-        //   .then(json)
-          .then(function (data) {
-            console.log('Request succeeded with JSON response', data);
-            cleanupAndLoad()
-          })
-          .catch(function (error) {
-            console.log('Request failed', error);
-          });
+            //   .then(json)
+            .then(function (data) {
+                console.log('Request succeeded with JSON response', data);
+                cleanupAndLoad()
+            })
+            .catch(function (error) {
+                console.log('Request failed', error);
+            });
+        } else {
+            createError();
+        }
     });
 }
 
 // make a call to delete an article based on the id
 function deleteArticle(id) {
-    fetch(`http://localhost:3000/articles/${id}`, {
-    method: 'DELETE',
-    })
-    .then(res => res.json())
-    .then(res => {
-        cleanupAndLoad()
-    })
+    // window.confirm("Are you sure you want to delete this article?");
+    if (confirm("Are you sure you want to delete this article?")) {
+        fetch(`http://localhost:3000/articles/${id}`, {
+        method: 'DELETE',
+        })
+        .then(res => res.json())
+        .then(res => {
+            cleanupAndLoad()
+        });
+    }
+    
 }
 
 function eventListenerTheme() {
@@ -381,6 +411,24 @@ function cleanupAndLoad() {
     loadContent(window.location.hash.substring(1));
 }
 
+function createError() {
+    let exist = document.querySelectorAll('.error_message');
+    if(exist.length === 0){
+        let modalTitle = document.querySelector(".modal__content .title");
+        let error = document.createElement('div');
+        error.setAttribute('class','error_message');
+        error.textContent = "Please complete all fields";
+        modalTitle.after(error);
+    }
+    
+}
+
+function removeError() {
+    let error = document.querySelectorAll(".error_message");
+    if(error){
+        error.forEach(n => n.remove());
+    }
+}
 
 // create the navigation menu
 function createNav(){

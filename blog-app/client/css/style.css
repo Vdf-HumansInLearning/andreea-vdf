@@ -5,15 +5,17 @@
     --modal-overlay : rgba(0,0,0,0.4);
     --pink : #FFE3E3;
     --black : #000000;
+    --red: red;
 }
 
 [data-theme="dark"] {
     --nav-link :  #e4e4e4;
-    --info-item : #b8b8b8;
+    --info-item : #575555;
     --white : #000000;
     --modal-overlay : rgba(0,0,0,0.4);
     --pink : #740753;
     --black : #ffffff;
+    --red:rgb(196, 0, 0);
 }
 
 *{
@@ -211,7 +213,7 @@ main article:not(:first-child){
     bottom: 0;
     padding: 50px 75px;
     width: 1000px;
-    height: 750px;
+    height: 780px;
     background-color: var(--white);
     margin: auto;
     border:1px solid var(--info-item);
@@ -267,12 +269,22 @@ main article:not(:first-child){
     align-items: center;
     justify-content: center;
     height: 100vh;
+    color:var(--black);
+    background-color: var(--white);
 }
 
 .not-found-container .subtitle{
     text-transform: uppercase;
     font-weight: bold;
     margin:10px 0;
+}
+
+.error_message {
+    background-color: red;
+    color:white;
+    text-align: center;
+    padding:10px;
+    margin-top:10px;
 }
 
 /* DETAILS PAGE */
