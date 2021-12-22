@@ -134,7 +134,11 @@
                             <a href="/phone/<%= products[i].name %>" class="phone-link mb-2">
                                 <button class="btn btn-danger">See product details  &gt;</button>
                             </a>
-                            <button class="add-to-cart text-center btn btn-danger mt-2">Add to cart</button>
+                            <% if(products[i].quantity > 0){ %>
+                                <button class="add-to-cart text-center btn btn-danger mt-2">Add to cart</button>
+                            <% } else{ %>  
+                                <button class="add-to-cart text-center btn btn-danger mt-2" disabled>Add to cart</button>
+                            <% } %>
                         </div>
                     </div>
                     

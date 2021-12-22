@@ -30,9 +30,9 @@ router.get('/user/:id', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  console.log(req.body.data);
     let orders = JSON.parse(fs.readFileSync('./data/orders.json', 'utf8'));
     let users = JSON.parse(fs.readFileSync('./data/users.json', 'utf8'));
+    let products = JSON.parse(fs.readFileSync('./data/phones.json', 'utf8'));
     let user = users.find(user => user.id == req.body.data.user);
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -51,15 +51,34 @@ router.post('/', function(req, res, next) {
         "phone": user.phone,
         "order": req.body.data.items,
         "payment": 'card',
-        "date" : date
+        "date" : date,
+        "total" : req.body.data.total
       };
 
         orders.push(order);
+        for(let i = 0; i < req.body.data.items.length; i++){
+          let phone = products.find(item => `${item.brand} ${item.name}` == req.body.data.items[i].name);
+          
+          if(phone){
+            if(phone.quantity > 1){
+              phone.quantity = phone.quantity - req.body.data.items[i].quantity;
+            } else {
+              phone.quantity = 0;
+            }
+          }
+        }
         fs.writeFile('./data/orders.json', JSON.stringify(orders), function (err) { 
             if (err) {
                 throw err;
             } else {
-                res.status(200).send({ message: "Successfully registered" });
+                fs.writeFile('./data/phones.json', JSON.stringify(products), function (err) { 
+                  if (err) {
+                      throw err;
+                  } else {
+                    res.status(200).send({ message: "Successfully registered" });
+                  }
+                });
+                
             }
         })
     } else {
