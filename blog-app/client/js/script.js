@@ -40,7 +40,7 @@ window.onload = function(e) {
     if(window.location.hash === ""){
         window.location.hash = "home";
     }
-    onRouteChange(e);
+    cleanupAndLoad();
     window.scrollTo(0, 0);
     // set the theme
     let localStorageTheme = localStorage.getItem('theme');
@@ -122,25 +122,7 @@ function getArticles(path,body){
                         main.appendChild(createArticleDetails(data));
 
                         containerDiv.appendChild(main);
-                        fetch(`http://localhost:3002/articles`)
-                        .then(
-                            function(response) {
-
-                            // Examine the text in the response
-                            response.json().then(function(data) {
-                                if (response.status !== 200) {
-                                    console.log('Looks like there was a problem. Status Code: ' +
-                                    response.status);
-                                    return;
-                                } else {
-                                    containerDiv.appendChild(createFooterDetails(data.articles));
-                                }
-                            });
-                        }
-                        )
-                        .catch(function(err) {
-                            console.log('Fetch Error :-S', err);
-                        });
+                        containerDiv.appendChild(createFooterDetails(data.prevId, data.nextId));
                         
                         body.appendChild(containerDiv);
 
@@ -670,31 +652,26 @@ function createFooterHome() {
 }
 
 // create the footer for the details page
-function createFooterDetails(articles) {
-    const url = window.location.hash.substring(1);
-    const id = Number(url.slice(11));
-
+function createFooterDetails(prevId, nextId) {
     let footer = document.createElement("footer");
     footer.setAttribute("class","footer");
-    let articlesId = articles.map(article => article.id);
-    let index = articlesId.indexOf(id);
     
-    if(id > 1) {
+    if(prevId) {
         let prevBtn = document.createElement("button");
         prevBtn.setAttribute("class","footer__link");
         prevBtn.textContent = "previous article";
         let prevLink = document.createElement("a");
-        prevLink.setAttribute("href",`/client/#article?id=${articlesId[index - 1]}`);
+        prevLink.setAttribute("href",`/client/#article?id=${prevId}`);
         prevLink.appendChild(prevBtn);
         footer.appendChild(prevLink);
     }
-    if(index < articles.length - 1) {
+    if(nextId) {
         let prevDiv = document.createElement("div");
         let nextBtn = document.createElement("button");
         nextBtn.setAttribute("class","footer__link footer__link--next");
         nextBtn.textContent = "next article";
         let nextLink = document.createElement("a");
-        nextLink.setAttribute("href",`/client/#article?id=${articlesId[index + 1]}`);
+        nextLink.setAttribute("href",`/client/#article?id=${nextId}`);
         nextLink.appendChild(nextBtn);
         footer.appendChild(prevDiv);
         footer.appendChild(nextLink);
