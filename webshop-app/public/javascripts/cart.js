@@ -256,12 +256,13 @@ if(localStorageItems && localStorageObject.length > 0){
         .split('; ')
         .find(row => row.startsWith('user_id='))
         .split('=')[1];
+        let orderTotal = Number(document.getElementById('order-total').lastChild.textContent.slice(0,-4));
         fetch('http://localhost:3000/orders',{
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({items : localStorageObject, total : totalPrice, user : cookieValue})
+            body: JSON.stringify({items : localStorageObject, total : orderTotal, user : cookieValue})
         })
         .then(data => {
             if(data.status === 200){
