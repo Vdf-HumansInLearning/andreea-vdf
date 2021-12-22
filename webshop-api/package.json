@@ -7,6 +7,9 @@
     "start": "nodemon index.js",
     "test": "mocha **/*.spec.js"
   },
+  "nodemonConfig": {
+    "ignore": ["data/orders.json"]
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

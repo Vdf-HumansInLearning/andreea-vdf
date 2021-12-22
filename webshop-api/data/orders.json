@@ -15,6 +15,61 @@
       { "name": "Samsung Galaxy a52s 5G", "price": "1849", "quantity": 1 }
     ],
     "payment": "card",
-    "date": "2021-12-16"
+    "date": "2021-12-16",
+    "total": 1849
+  },
+  {
+    "id": "f947cf30-6327-11ec-aa32-c7dd9951f34e",
+    "user-id": 1,
+    "name": "Leanne Graham",
+    "email": "Sincere@april.biz",
+    "address": {
+      "street": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "zipcode": "92998-3874"
+    },
+    "phone": "1-770-736-8031 x56442",
+    "order": [{ "name": "Samsung Galaxy A12", "price": "899", "quantity": 2 }],
+    "payment": "card",
+    "date": "2021-12-22",
+    "total": 1798
+  },
+  {
+    "id": "1973ef40-6329-11ec-8812-05fcfb0ebecc",
+    "user-id": 1,
+    "name": "Leanne Graham",
+    "email": "Sincere@april.biz",
+    "address": {
+      "street": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "zipcode": "92998-3874"
+    },
+    "phone": "1-770-736-8031 x56442",
+    "order": [{ "name": "Samsung Galaxy s21", "price": "3849", "quantity": 1 }],
+    "payment": "card",
+    "date": "2021-12-22",
+    "total": 3849
+  },
+  {
+    "id": "c35d06c0-632b-11ec-85d3-715b6f68a0e0",
+    "user-id": 1,
+    "name": "Leanne Graham",
+    "email": "Sincere@april.biz",
+    "address": {
+      "street": "Kulas Light",
+      "suite": "Apt. 556",
+      "city": "Gwenborough",
+      "zipcode": "92998-3874"
+    },
+    "phone": "1-770-736-8031 x56442",
+    "order": [
+      { "name": "Samsung Galaxy A12", "price": "899", "quantity": 1 },
+      { "name": "Huawei P20", "price": "2400", "quantity": 1 }
+    ],
+    "payment": "card",
+    "date": "2021-12-22",
+    "total": 3299
   }
 ]

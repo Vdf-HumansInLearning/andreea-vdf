@@ -1,5 +1,6 @@
-var localStorageItems = localStorage.getItem('items');
-var localStorageObject = JSON.parse(localStorageItems);
+let localStorageItems = localStorage.getItem('items');
+let localStorageObject = JSON.parse(localStorageItems);
+let totalPrice = 0;
 
 if(localStorageItems && localStorageObject.length > 0){
 
@@ -11,7 +12,6 @@ if(localStorageItems && localStorageObject.length > 0){
     orderDiv.setAttribute("id","order");
     document.getElementById("container").appendChild(orderH3);
     document.getElementById("container").appendChild(orderDiv);
-    let totalPrice = 0;
     for(let i=0;i<localStorageObject.length;i++){
             let itemDiv = document.createElement("div");
             itemDiv.setAttribute("class","d-flex justify-content-between align-items-center p-2 item-container");
@@ -25,6 +25,9 @@ if(localStorageItems && localStorageObject.length > 0){
             let spanMinus = document.createElement("span");
             let buttonMinus = document.createElement("button");
             buttonMinus.setAttribute("class","quantity-btn minus-btn");
+            if(localStorageObject[i].quantity < 2) {
+                buttonMinus.disabled = true;
+            }
             let iconMinus = document.createElement("i");
             iconMinus.setAttribute("class","far fa-minus-square mx-2");
             buttonMinus.appendChild(iconMinus);
@@ -35,6 +38,9 @@ if(localStorageItems && localStorageObject.length > 0){
             let spanPlus = document.createElement("span");
             let buttonPlus = document.createElement("button");
             buttonPlus.setAttribute("class","quantity-btn plus-btn");
+            if(localStorageObject[i].quantity > 4) {
+                buttonPlus.disabled = true;
+            }
             let iconPlus = document.createElement("i");
             iconPlus.setAttribute("class","far fa-plus-square mx-2");
             spanPlus.appendChild(buttonPlus);
@@ -165,7 +171,12 @@ if(localStorageItems && localStorageObject.length > 0){
                     if(localStorageObject[i].name === item.parentElement.parentElement.parentElement.parentElement.firstChild.textContent.slice(2)){
                         localStorageObject[i].quantity -= 1;
                         item.parentElement.parentElement.parentElement.nextSibling.lastChild.textContent = `${localStorageObject[i].quantity} x ${localStorageObject[i].price} = ` + Number(localStorageObject[i].price) * (localStorageObject[i].quantity) + " RON";
-                        
+                        if(localStorageObject[i].quantity < 5) {
+                            item.parentElement.nextSibling.nextSibling.firstChild.disabled = false;
+                        }
+                        if(localStorageObject[i].quantity < 2){
+                            item.disabled = true;
+                        }
                     }
                     if(localStorageObject[i].quantity === 0){
                         localStorageObject.splice(i, 1);
@@ -196,6 +207,12 @@ if(localStorageItems && localStorageObject.length > 0){
                 if(localStorageObject[i].name === item.parentElement.parentElement.parentElement.parentElement.firstChild.textContent.slice(2)){
                     localStorageObject[i].quantity += 1;
                     item.parentElement.parentElement.parentElement.nextSibling.lastChild.textContent = `${localStorageObject[i].quantity} x ${localStorageObject[i].price} = ` + Number(localStorageObject[i].price) * (localStorageObject[i].quantity) + " RON";
+                    if(localStorageObject[i].quantity > 4){
+                        item.disabled = true;
+                    }
+                    if(localStorageObject[i].quantity > 1) {
+                        item.parentElement.parentElement.firstChild.firstChild.disabled = false;
+                    }
                 }
                 localStorage.setItem("items", JSON.stringify(localStorageObject));
                 total += Number(localStorageObject[i].price) * localStorageObject[i].quantity;
@@ -244,7 +261,7 @@ if(localStorageItems && localStorageObject.length > 0){
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({items : localStorageObject, user : cookieValue})
+            body: JSON.stringify({items : localStorageObject, total : totalPrice, user : cookieValue})
         })
         .then(data => {
             if(data.status === 200){
