@@ -9,18 +9,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/home-style.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="/css/home-style.css">
+    <title><%= title %></title>
 </head>
 <body>
         <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
-              <img src="https://raw.githubusercontent.com/WebToLearn/fx-trading-app/master/App/ui/src/assets/img/logo-main.svg" alt="logo">
+              <a href="/"><img src="https://raw.githubusercontent.com/WebToLearn/fx-trading-app/master/App/ui/src/assets/img/logo-main.svg" alt="logo"></a>
               <form class="d-flex">
-                <button class="btn btn-outline-secondary logout-btn" type="submit">Logout</button>
+                <% if(loggedIn) {%>
+                    <a role="button" class="btn btn-outline-secondary logout-btn" href="/auth/logout">Logout</a>
+                <% } else { %>
+                    <a role="button" class="btn btn-outline-secondary login-btn" href="/auth/login">Login</a>
+                <% } %>
+                
               </form>
         </nav>
-
+        <% if(loggedIn) {%>
         <div class="row main container mb-3">
             <div class="left-side col-lg-6 col-sm-12">
                 <h2 class="title pt-4">FX Rates View</h2>
@@ -434,5 +439,8 @@
                 </div>
             </div>
         </div>
+        <% } else { %>
+            <h3 class="text-center mt-3">Please login in order to see this page</h3>
+        <% } %>
 </body>
 </html>

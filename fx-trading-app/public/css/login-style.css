@@ -31,14 +31,24 @@ body {
     width: 100%;
 }
 
+.main-header {
+    grid-column: 2/3;
+    grid-row: 1/2;
+    align-self: end;
+    text-align: center;
+}
+
+.already-auth {
+    grid-column: 2/3;
+    grid-row: 2/2;
+    text-align: center;
+}
+
 .main-title {
     font-size:1em;
     font-weight: bold;
     color: #7C7C7C;
     margin-bottom: 20px;
-    grid-column: 2/3;
-    grid-row: 1/2;
-    align-self: end;
 }
 
 .form-control {

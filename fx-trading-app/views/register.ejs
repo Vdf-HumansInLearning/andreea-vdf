@@ -8,36 +8,37 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/register-style.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="/css/register-style.css">
+    <title><%= title %></title>
 </head>
 <body>
     <aside class="aside">
-        <img class="logo" src="https://raw.githubusercontent.com/WebToLearn/fx-trading-app/master/App/ui/src/assets/img/logo-grayscale.svg" alt="logo">
+        <a href="/"><img class="logo" src="https://raw.githubusercontent.com/WebToLearn/fx-trading-app/master/App/ui/src/assets/img/logo-grayscale.svg" alt="logo"></a>
     </aside>
     <main class="main">
         <h1 class="main-title">Register a new account</h1>
-        <form class="login-form">
+        <form id="form-register" class="login-form" action="/auth/register" method="post">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input type="text" placeholder="Username" class="form-control" id="username" aria-describedby="usernameHelp">
+                <input type="text" name="username" placeholder="Username" class="form-control" id="username" aria-describedby="usernameHelp" required>
             </div>
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input type="email" placeholder="Email address" class="form-control" id="email" aria-describedby="emailHelp">
+                <input type="email" name="email" placeholder="Email address" class="form-control" id="email" aria-describedby="emailHelp" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input type="password" placeholder="Password" class="form-control" id="password">
+                <input type="password" name="password" placeholder="Password" class="form-control" id="password" required>
             </div>
             <div class="mb-3">
                 <label for="confirm-password" class="form-label">Confirm password</label>
-                <input type="password" placeholder="Confirm password" class="form-control" id="confirm-password">
+                <input type="password" name="confirm_password" placeholder="Confirm password" class="form-control" id="confirm-password" required>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
-            <div id="registerHelp" class="form-text">Already have an account?<a href="login.html" class="register-link"> Login</a></div>
+            <div id="registerHelp" class="form-text">Already have an account?<a href="/auth/login" class="register-link"> Login</a></div>
           </form>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="/js/register.js"></script>
 </body>
 </html>
